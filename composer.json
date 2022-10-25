@@ -1,6 +1,6 @@
 {
-    "name": "paypal/rest-api-sdk-php",
-    "description": "PayPal's PHP SDK for REST APIs",
+    "name": "cqfdev/paypal-rest-api-sdk-php",
+    "description": "PayPal's PHP SDK for REST APIs with psr/log package unlocked",
     "keywords": ["paypal", "payments", "rest", "sdk"],
     "type": "library",
     "license": "Apache2",
