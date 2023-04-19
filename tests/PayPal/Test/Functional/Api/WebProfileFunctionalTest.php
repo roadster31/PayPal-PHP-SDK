@@ -29,10 +29,10 @@ class WebProfileFunctionalTest extends TestCase
         $className = $this->getClassName();
         $testName = $this->getName();
         $operationString = file_get_contents(__DIR__ . "/../resources/$className/$testName.json");
-        $this->operation = json_decode($operationString, true);
+        $this->operation = json_decode($operationString, true, 512, JSON_THROW_ON_ERROR);
         $this->response = true;
         if (array_key_exists('body', $this->operation['response'])) {
-            $this->response = json_encode($this->operation['response']['body']);
+            $this->response = json_encode($this->operation['response']['body'], JSON_THROW_ON_ERROR);
         }
 
         Setup::SetUpForFunctionalTests($this);
@@ -44,7 +44,7 @@ class WebProfileFunctionalTest extends TestCase
      */
     public function getClassName()
     {
-        return join('', array_slice(explode('\\', get_class($this)), -1));
+        return join('', array_slice(explode('\\', static::class), -1));
     }
 
     public function testCreate()
@@ -119,7 +119,7 @@ class WebProfileFunctionalTest extends TestCase
      */
     public function testPartialUpdate($webProfile)
     {
-        $patches = array();
+        $patches = [];
         $patches[] = new Patch('{
              "op": "add",
              "path": "/presentation/brand_name",

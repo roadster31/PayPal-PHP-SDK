@@ -54,7 +54,7 @@ class ItemListTest extends TestCase
      */
     public function testGetters($obj)
     {
-        $this->assertEquals($obj->getItems(), array(ItemTest::getObject()));
+        $this->assertEquals($obj->getItems(), [ItemTest::getObject()]);
         $this->assertEquals($obj->getShippingAddress(), ShippingAddressTest::getObject());
         $this->assertEquals($obj->getShippingMethod(), "TestSample");
         $this->assertEquals($obj->getShippingPhoneNumber(), "TestSample");

@@ -5,6 +5,7 @@
 
 namespace PayPal\Handler;
 
+use Paypal\Rest\ApiContext;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Common\PayPalUserAgent;
 use PayPal\Core\PayPalConstants;
@@ -20,20 +21,12 @@ use PayPal\Exception\PayPalMissingCredentialException;
 class RestHandler implements IPayPalHandler
 {
     /**
-     * Private Variable
-     *
-     * @var \Paypal\Rest\ApiContext $apiContext
-     */
-    private $apiContext;
-
-    /**
      * Construct
      *
-     * @param \Paypal\Rest\ApiContext $apiContext
+     * @param ApiContext $apiContext
      */
-    public function __construct($apiContext)
+    public function __construct(private $apiContext)
     {
-        $this->apiContext = $apiContext;
     }
 
     /**
@@ -68,7 +61,7 @@ class RestHandler implements IPayPalHandler
 
         $httpConfig->setUrl(
             rtrim(trim($this->_getEndpoint($config)), '/') .
-            (isset($options['path']) ? $options['path'] : '')
+            ($options['path'] ?? '')
         );
 
         // Overwrite Expect Header to disable 100 Continue Issue
@@ -98,24 +91,18 @@ class RestHandler implements IPayPalHandler
      * @param array $config
      *
      * @return string
-     * @throws \PayPal\Exception\PayPalConfigurationException
+     * @throws PayPalConfigurationException
      */
     private function _getEndpoint($config)
     {
         if (isset($config['service.EndPoint'])) {
             return $config['service.EndPoint'];
         } elseif (isset($config['mode'])) {
-            switch (strtoupper($config['mode'])) {
-                case 'SANDBOX':
-                    return PayPalConstants::REST_SANDBOX_ENDPOINT;
-                    break;
-                case 'LIVE':
-                    return PayPalConstants::REST_LIVE_ENDPOINT;
-                    break;
-                default:
-                    throw new PayPalConfigurationException('The mode config parameter must be set to either sandbox/live');
-                    break;
-            }
+            return match (strtoupper($config['mode'])) {
+                'SANDBOX' => PayPalConstants::REST_SANDBOX_ENDPOINT,
+                'LIVE' => PayPalConstants::REST_LIVE_ENDPOINT,
+                default => throw new PayPalConfigurationException('The mode config parameter must be set to either sandbox/live'),
+            };
         } else {
             // Defaulting to Sandbox
             return PayPalConstants::REST_SANDBOX_ENDPOINT;

@@ -2,12 +2,13 @@
 
 namespace PayPal\Exception;
 
+use Exception;
 /**
  * Class PayPalInvalidCredentialException
  *
  * @package PayPal\Exception
  */
-class PayPalInvalidCredentialException extends \Exception
+class PayPalInvalidCredentialException extends Exception
 {
 
     /**

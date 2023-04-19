@@ -6,11 +6,7 @@ if (PHP_SAPI == 'cli') {
     if (version_compare(phpversion(), '5.4.0', '>=') === true) {
         //exec('php -S -t ' . __DIR__ . '/');
         $cmd = "php -S localhost:5000 -t " . __DIR__;
-        $descriptors = array(
-            0 => array("pipe", "r"),
-            1 => STDOUT,
-            2 => STDERR,
-        );
+        $descriptors = [0 => ["pipe", "r"], 1 => STDOUT, 2 => STDERR];
         $process = proc_open($cmd, $descriptors, $pipes);
         if ($process === false) {
             fprintf(STDERR,

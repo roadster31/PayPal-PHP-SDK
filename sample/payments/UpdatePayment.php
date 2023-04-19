@@ -1,4 +1,6 @@
 <?php
+use PayPal\Api\Patch;
+use PayPal\Api\PatchRequest;
 // # Update Payment Sample
 // This sample code demonstrate how you can
 // update a Payment resources
@@ -44,7 +46,7 @@ $paymentId = $createdPayment->getId();
 //                }
 //            }
 //        ]
-$patchReplace = new \PayPal\Api\Patch();
+$patchReplace = new Patch();
 $patchReplace->setOp('replace')
     ->setPath('/transactions/0/amount')
     ->setValue(json_decode('{
@@ -57,7 +59,7 @@ $patchReplace->setOp('replace')
                     }
                 }'));
 
-$patchAdd = new \PayPal\Api\Patch();
+$patchAdd = new Patch();
 $patchAdd->setOp('add')
     ->setPath('/transactions/0/item_list/shipping_address')
     ->setValue(json_decode('{
@@ -69,8 +71,8 @@ $patchAdd->setOp('add')
                     "country_code": "US"
                 }'));
 
-$patchRequest = new \PayPal\Api\PatchRequest();
-$patchRequest->setPatches(array($patchReplace, $patchAdd));
+$patchRequest = new PatchRequest();
+$patchRequest->setPatches([$patchReplace, $patchAdd]);
 
 
 // ### Update payment

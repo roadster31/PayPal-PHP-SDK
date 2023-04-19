@@ -59,8 +59,8 @@ class Authorization extends PayPalResourceModel
     /**
      * Amount being authorized.
      *
-     * @param \PayPal\Api\Amount $amount
-     * 
+     * @param Amount $amount
+     *
      * @return $this
      */
     public function setAmount($amount)
@@ -72,7 +72,7 @@ class Authorization extends PayPalResourceModel
     /**
      * Amount being authorized.
      *
-     * @return \PayPal\Api\Amount
+     * @return Amount
      */
     public function getAmount()
     {
@@ -226,8 +226,8 @@ class Authorization extends PayPalResourceModel
     /**
      * Fraud Management Filter (FMF) details applied for the payment that could result in accept, deny, or pending action. Returned in a payment response only if the merchant has enabled FMF in the profile settings and one of the fraud filters was triggered based on those settings. See [Fraud Management Filters Summary](https://developer.paypal.com/docs/classic/fmf/integration-guide/FMFSummary/) for more information.
      *
-     * @param \PayPal\Api\FmfDetails $fmf_details
-     * 
+     * @param FmfDetails $fmf_details
+     *
      * @return $this
      */
     public function setFmfDetails($fmf_details)
@@ -239,7 +239,7 @@ class Authorization extends PayPalResourceModel
     /**
      * Fraud Management Filter (FMF) details applied for the payment that could result in accept, deny, or pending action. Returned in a payment response only if the merchant has enabled FMF in the profile settings and one of the fraud filters was triggered based on those settings. See [Fraud Management Filters Summary](https://developer.paypal.com/docs/classic/fmf/integration-guide/FMFSummary/) for more information.
      *
-     * @return \PayPal\Api\FmfDetails
+     * @return FmfDetails
      */
     public function getFmfDetails()
     {
@@ -272,7 +272,7 @@ class Authorization extends PayPalResourceModel
     /**
      * Response codes returned by the processor concerning the submitted payment. Only supported when the `payment_method` is set to `credit_card`.
      *
-     * @param \PayPal\Api\ProcessorResponse $processor_response
+     * @param ProcessorResponse $processor_response
      *
      * @return $this
      */
@@ -285,7 +285,7 @@ class Authorization extends PayPalResourceModel
     /**
      * Response codes returned by the processor concerning the submitted payment. Only supported when the `payment_method` is set to `credit_card`.
      *
-     * @return \PayPal\Api\ProcessorResponse
+     * @return ProcessorResponse
      */
     public function getProcessorResponse()
     {

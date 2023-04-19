@@ -2,6 +2,7 @@
 
 namespace PayPal\Api;
 
+use InvalidArgumentException;
 use PayPal\Common\PayPalResourceModel;
 use PayPal\Validation\ArgumentValidator;
 use PayPal\Api\VerifyWebhookSignatureResponse;
@@ -52,7 +53,7 @@ class VerifyWebhookSignature extends PayPalResourceModel
      * The X.509 public key certificate. Download the certificate from this URL and use it to verify the signature. Extract this value from the `PAYPAL-CERT-URL` response header, which is received with the webhook notification.
      *
      * @param string $cert_url
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return $this
      */
     public function setCertUrl($cert_url)
@@ -167,7 +168,7 @@ class VerifyWebhookSignature extends PayPalResourceModel
     /**
      * The webhook notification, which is the content of the HTTP `POST` request body.
      * @deprecated Please use setRequestBody($request_body) instead.
-     * @param \PayPal\Api\WebhookEvent $webhook_event
+     * @param WebhookEvent $webhook_event
      *
      * @return $this
      */
@@ -180,7 +181,7 @@ class VerifyWebhookSignature extends PayPalResourceModel
     /**
      * The webhook notification, which is the content of the HTTP `POST` request body.
      *
-     * @return \PayPal\Api\WebhookEvent
+     * @return WebhookEvent
      */
     public function getWebhookEvent()
     {

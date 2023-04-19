@@ -45,11 +45,10 @@ class Amount extends PayPalModel
     /**
      * Total amount charged from the payer to the payee. In case of a refund, this is the refunded amount to the original payer from the payee. 10 characters max with support for 2 decimal places.
      *
-     * @param string|double $total
-     * 
+     *
      * @return $this
      */
-    public function setTotal($total)
+    public function setTotal(string|float $total)
     {
         NumericValidator::validate($total, "Total");
         $total = FormatConverter::formatToPrice($total, $this->getCurrency());
@@ -70,8 +69,8 @@ class Amount extends PayPalModel
     /**
      * Additional details of the payment amount.
      *
-     * @param \PayPal\Api\Details $details
-     * 
+     * @param Details $details
+     *
      * @return $this
      */
     public function setDetails($details)
@@ -83,7 +82,7 @@ class Amount extends PayPalModel
     /**
      * Additional details of the payment amount.
      *
-     * @return \PayPal\Api\Details
+     * @return Details
      */
     public function getDetails()
     {

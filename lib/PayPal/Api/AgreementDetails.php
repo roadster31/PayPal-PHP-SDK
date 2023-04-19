@@ -25,8 +25,8 @@ class AgreementDetails extends PayPalModel
     /**
      * The outstanding balance for this agreement.
      *
-     * @param \PayPal\Api\Currency $outstanding_balance
-     * 
+     * @param Currency $outstanding_balance
+     *
      * @return $this
      */
     public function setOutstandingBalance($outstanding_balance)
@@ -38,7 +38,7 @@ class AgreementDetails extends PayPalModel
     /**
      * The outstanding balance for this agreement.
      *
-     * @return \PayPal\Api\Currency
+     * @return Currency
      */
     public function getOutstandingBalance()
     {
@@ -140,8 +140,8 @@ class AgreementDetails extends PayPalModel
     /**
      * Last payment amount for this agreement.
      *
-     * @param \PayPal\Api\Currency $last_payment_amount
-     * 
+     * @param Currency $last_payment_amount
+     *
      * @return $this
      */
     public function setLastPaymentAmount($last_payment_amount)
@@ -153,7 +153,7 @@ class AgreementDetails extends PayPalModel
     /**
      * Last payment amount for this agreement.
      *
-     * @return \PayPal\Api\Currency
+     * @return Currency
      */
     public function getLastPaymentAmount()
     {

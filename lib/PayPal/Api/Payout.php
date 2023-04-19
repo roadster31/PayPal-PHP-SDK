@@ -23,7 +23,7 @@ class Payout extends PayPalResourceModel
     /**
      * The original batch header as provided by the payment sender.
      *
-     * @param \PayPal\Api\PayoutSenderBatchHeader $sender_batch_header
+     * @param PayoutSenderBatchHeader $sender_batch_header
      *
      * @return $this
      */
@@ -36,7 +36,7 @@ class Payout extends PayPalResourceModel
     /**
      * The original batch header as provided by the payment sender.
      *
-     * @return \PayPal\Api\PayoutSenderBatchHeader
+     * @return PayoutSenderBatchHeader
      */
     public function getSenderBatchHeader()
     {
@@ -46,7 +46,7 @@ class Payout extends PayPalResourceModel
     /**
      * An array of payout items (that is, a set of individual payouts).
      *
-     * @param \PayPal\Api\PayoutItem[] $items
+     * @param PayoutItem[] $items
      *
      * @return $this
      */
@@ -59,7 +59,7 @@ class Payout extends PayPalResourceModel
     /**
      * An array of payout items (that is, a set of individual payouts).
      *
-     * @return \PayPal\Api\PayoutItem[]
+     * @return PayoutItem[]
      */
     public function getItems()
     {
@@ -69,16 +69,16 @@ class Payout extends PayPalResourceModel
     /**
      * Append Items to the list.
      *
-     * @param \PayPal\Api\PayoutItem $payoutItem
+     * @param PayoutItem $payoutItem
      * @return $this
      */
     public function addItem($payoutItem)
     {
         if (!$this->getItems()) {
-            return $this->setItems(array($payoutItem));
+            return $this->setItems([$payoutItem]);
         } else {
             return $this->setItems(
-                array_merge($this->getItems(), array($payoutItem))
+                array_merge($this->getItems(), [$payoutItem])
             );
         }
     }
@@ -86,13 +86,13 @@ class Payout extends PayPalResourceModel
     /**
      * Remove Items from the list.
      *
-     * @param \PayPal\Api\PayoutItem $payoutItem
+     * @param PayoutItem $payoutItem
      * @return $this
      */
     public function removeItem($payoutItem)
     {
         return $this->setItems(
-            array_diff($this->getItems(), array($payoutItem))
+            array_diff($this->getItems(), [$payoutItem])
         );
     }
 
@@ -104,14 +104,12 @@ class Payout extends PayPalResourceModel
      * @param PayPalRestCall $restCall is the Rest Call Service that is used to make rest calls
      * @return PayoutBatch
      */
-    public function create($params = array(), $apiContext = null, $restCall = null)
+    public function create($params = [], $apiContext = null, $restCall = null)
     {
-        $params = $params ? $params : array();
+        $params = $params ?: [];
         ArgumentValidator::validate($params, 'params');
         $payLoad = $this->toJSON();
-        $allowedParams = array(
-            'sync_mode' => 1,
-        );
+        $allowedParams = ['sync_mode' => 1];
         $json = self::executeCall(
             "/v1/payments/payouts" . "?" . http_build_query(array_intersect_key($params, $allowedParams)),
             "POST",
@@ -134,7 +132,7 @@ class Payout extends PayPalResourceModel
      */
     public function createSynchronous($apiContext = null, $restCall = null)
     {
-        $params = array('sync_mode' => 'true');
+        $params = ['sync_mode' => 'true'];
         return $this->create($params, $apiContext, $restCall);
     }
 

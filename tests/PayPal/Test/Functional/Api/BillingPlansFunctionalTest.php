@@ -38,10 +38,10 @@ class BillingPlansFunctionalTest extends TestCase
     public function setupTest($className, $testName)
     {
         $operationString = file_get_contents(__DIR__ . "/../resources/$className/$testName.json");
-        $this->operation = json_decode($operationString, true);
+        $this->operation = json_decode($operationString, true, 512, JSON_THROW_ON_ERROR);
         $this->response = true;
         if (array_key_exists('body', $this->operation['response'])) {
-            $this->response = json_encode($this->operation['response']['body']);
+            $this->response = json_encode($this->operation['response']['body'], JSON_THROW_ON_ERROR);
         }
 
         Setup::SetUpForFunctionalTests($this);
@@ -72,7 +72,7 @@ class BillingPlansFunctionalTest extends TestCase
      */
     public function getClassName()
     {
-        return join('', array_slice(explode('\\', get_class($this)), -1));
+        return join('', array_slice(explode('\\', static::class), -1));
     }
 
     public function testCreate()
@@ -114,7 +114,7 @@ class BillingPlansFunctionalTest extends TestCase
      */
     public function testGetList($plan)
     {
-        $result = Plan::all(array('page_size' => '20', 'total_required' => 'yes'), $this->apiContext, $this->mockPayPalRestCall);
+        $result = Plan::all(['page_size' => '20', 'total_required' => 'yes'], $this->apiContext, $this->mockPayPalRestCall);
         $this->assertNotNull($result);
         $totalPages = $result->getTotalPages();
         $found = false;
@@ -128,7 +128,7 @@ class BillingPlansFunctionalTest extends TestCase
                 }
             }
             if (!$found) {
-                $result = Plan::all(array('page' => --$totalPages, 'page_size' => '20', 'total_required' => 'yes'), $this->apiContext, $this->mockPayPalRestCall);
+                $result = Plan::all(['page' => --$totalPages, 'page_size' => '20', 'total_required' => 'yes'], $this->apiContext, $this->mockPayPalRestCall);
             }
         } while ($totalPages > 0 && $found == false);
         $this->assertTrue($found, "The Created Plan was not found in the get list");
@@ -147,7 +147,7 @@ class BillingPlansFunctionalTest extends TestCase
         $patch->setOp($request['op']);
         $patch->setPath($request['path']);
         $patch->setValue($request['value']);
-        $patches = array();
+        $patches = [];
         $patches[] = $patch;
         $patchRequest = new PatchRequest();
         $patchRequest->setPatches($patches);
@@ -168,7 +168,7 @@ class BillingPlansFunctionalTest extends TestCase
         $paymentDefinitions = $plan->getPaymentDefinitions();
         $patch->setPath('/payment-definitions/' . $paymentDefinitions[0]->getId());
         $patch->setValue($request['value']);
-        $patches = array();
+        $patches = [];
         $patches[] = $patch;
         $patchRequest = new PatchRequest();
         $patchRequest->setPatches($patches);
@@ -189,7 +189,7 @@ class BillingPlansFunctionalTest extends TestCase
         $patch->setOp($request['op']);
         $patch->setPath($request['path']);
         $patch->setValue($request['value']);
-        $patches = array();
+        $patches = [];
         $patches[] = $patch;
         $patchRequest = new PatchRequest();
         $patchRequest->setPatches($patches);

@@ -17,8 +17,8 @@ use PayPal\Validation\ArgumentValidator;
  * @property string template_id
  * @property string name
  * @property bool default
- * @property \PayPal\Api\TemplateData template_data
- * @property \PayPal\Api\TemplateSettings[] settings
+ * @property TemplateData template_data
+ * @property TemplateSettings[] settings
  * @property string unit_of_measure
  * @property bool custom
  */
@@ -96,8 +96,8 @@ class Template extends PayPalResourceModel
     /**
      * Customized invoice data which is saved as template
      *
-     * @param \PayPal\Api\TemplateData $template_data
-     * 
+     * @param TemplateData $template_data
+     *
      * @return $this
      */
     public function setTemplateData($template_data)
@@ -109,7 +109,7 @@ class Template extends PayPalResourceModel
     /**
      * Customized invoice data which is saved as template
      *
-     * @return \PayPal\Api\TemplateData
+     * @return TemplateData
      */
     public function getTemplateData()
     {
@@ -119,8 +119,8 @@ class Template extends PayPalResourceModel
     /**
      * Settings for each template
      *
-     * @param \PayPal\Api\TemplateSettings[] $settings
-     * 
+     * @param TemplateSettings[] $settings
+     *
      * @return $this
      */
     public function setSettings($settings)
@@ -132,7 +132,7 @@ class Template extends PayPalResourceModel
     /**
      * Settings for each template
      *
-     * @return \PayPal\Api\TemplateSettings[]
+     * @return TemplateSettings[]
      */
     public function getSettings()
     {
@@ -142,16 +142,16 @@ class Template extends PayPalResourceModel
     /**
      * Append Settings to the list.
      *
-     * @param \PayPal\Api\TemplateSettings $templateSettings
+     * @param TemplateSettings $templateSettings
      * @return $this
      */
     public function addSetting($templateSettings)
     {
         if (!$this->getSettings()) {
-            return $this->setSettings(array($templateSettings));
+            return $this->setSettings([$templateSettings]);
         } else {
             return $this->setSettings(
-                array_merge($this->getSettings(), array($templateSettings))
+                array_merge($this->getSettings(), [$templateSettings])
             );
         }
     }
@@ -159,13 +159,13 @@ class Template extends PayPalResourceModel
     /**
      * Remove Settings from the list.
      *
-     * @param \PayPal\Api\TemplateSettings $templateSettings
+     * @param TemplateSettings $templateSettings
      * @return $this
      */
     public function removeSetting($templateSettings)
     {
         return $this->setSettings(
-            array_diff($this->getSettings(), array($templateSettings))
+            array_diff($this->getSettings(), [$templateSettings])
         );
     }
 

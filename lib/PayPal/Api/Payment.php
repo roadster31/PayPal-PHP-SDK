@@ -21,7 +21,7 @@ use PayPal\Rest\ApiContext;
  * @property string state
  * @property string experience_profile_id
  * @property string note_to_payer
- * @property \PayPal\Api\Payee $payee
+ * @property Payee $payee
  * @property \PayPal\Api\RedirectUrls redirect_urls
  * @property string failure_reason
  * @property string create_time
@@ -80,8 +80,8 @@ class Payment extends PayPalResourceModel
     /**
      * Source of the funds for this payment represented by a PayPal account or a direct credit card.
      *
-     * @param \PayPal\Api\Payer $payer
-     * 
+     * @param Payer $payer
+     *
      * @return $this
      */
     public function setPayer($payer)
@@ -93,7 +93,7 @@ class Payment extends PayPalResourceModel
     /**
      * Source of the funds for this payment represented by a PayPal account or a direct credit card.
      *
-     * @return \PayPal\Api\Payer
+     * @return Payer
      */
     public function getPayer()
     {
@@ -103,8 +103,8 @@ class Payment extends PayPalResourceModel
     /**
      * Information that the merchant knows about the payer.  This information is not definitive and only serves as a hint to the UI or any pre-processing logic.
      * @deprecated Not publicly available
-     * @param \PayPal\Api\PotentialPayerInfo $potential_payer_info
-     * 
+     * @param PotentialPayerInfo $potential_payer_info
+     *
      * @return $this
      */
     public function setPotentialPayerInfo($potential_payer_info)
@@ -116,7 +116,7 @@ class Payment extends PayPalResourceModel
     /**
      * Information that the merchant knows about the payer.  This information is not definitive and only serves as a hint to the UI or any pre-processing logic.
      * @deprecated Not publicly available
-     * @return \PayPal\Api\PotentialPayerInfo
+     * @return PotentialPayerInfo
      */
     public function getPotentialPayerInfo()
     {
@@ -125,8 +125,8 @@ class Payment extends PayPalResourceModel
 
     /**
      * Receiver of funds for this payment.
-     * @param \PayPal\Api\Payee $payee
-     * 
+     * @param Payee $payee
+     *
      * @return $this
      */
     public function setPayee($payee)
@@ -137,7 +137,7 @@ class Payment extends PayPalResourceModel
 
     /**
      * Receiver of funds for this payment.
-     * @return \PayPal\Api\Payee
+     * @return Payee
      */
     public function getPayee()
     {
@@ -170,8 +170,8 @@ class Payment extends PayPalResourceModel
     /**
      * Transactional details including the amount and item details.
      *
-     * @param \PayPal\Api\Transaction[] $transactions
-     * 
+     * @param Transaction[] $transactions
+     *
      * @return $this
      */
     public function setTransactions($transactions)
@@ -183,7 +183,7 @@ class Payment extends PayPalResourceModel
     /**
      * Transactional details including the amount and item details.
      *
-     * @return \PayPal\Api\Transaction[]
+     * @return Transaction[]
      */
     public function getTransactions()
     {
@@ -193,16 +193,16 @@ class Payment extends PayPalResourceModel
     /**
      * Append Transactions to the list.
      *
-     * @param \PayPal\Api\Transaction $transaction
+     * @param Transaction $transaction
      * @return $this
      */
     public function addTransaction($transaction)
     {
         if (!$this->getTransactions()) {
-            return $this->setTransactions(array($transaction));
+            return $this->setTransactions([$transaction]);
         } else {
             return $this->setTransactions(
-                array_merge($this->getTransactions(), array($transaction))
+                array_merge($this->getTransactions(), [$transaction])
             );
         }
     }
@@ -210,21 +210,21 @@ class Payment extends PayPalResourceModel
     /**
      * Remove Transactions from the list.
      *
-     * @param \PayPal\Api\Transaction $transaction
+     * @param Transaction $transaction
      * @return $this
      */
     public function removeTransaction($transaction)
     {
         return $this->setTransactions(
-            array_diff($this->getTransactions(), array($transaction))
+            array_diff($this->getTransactions(), [$transaction])
         );
     }
 
     /**
      * Applicable for advanced payments like multi seller payment (MSP) to support partial failures
      * @deprecated Not publicly available
-     * @param \PayPal\Api\Error[] $failed_transactions
-     * 
+     * @param Error[] $failed_transactions
+     *
      * @return $this
      */
     public function setFailedTransactions($failed_transactions)
@@ -236,7 +236,7 @@ class Payment extends PayPalResourceModel
     /**
      * Applicable for advanced payments like multi seller payment (MSP) to support partial failures
      * @deprecated Not publicly available
-     * @return \PayPal\Api\Error[]
+     * @return Error[]
      */
     public function getFailedTransactions()
     {
@@ -246,16 +246,16 @@ class Payment extends PayPalResourceModel
     /**
      * Append FailedTransactions to the list.
      * @deprecated Not publicly available
-     * @param \PayPal\Api\Error $error
+     * @param Error $error
      * @return $this
      */
     public function addFailedTransaction($error)
     {
         if (!$this->getFailedTransactions()) {
-            return $this->setFailedTransactions(array($error));
+            return $this->setFailedTransactions([$error]);
         } else {
             return $this->setFailedTransactions(
-                array_merge($this->getFailedTransactions(), array($error))
+                array_merge($this->getFailedTransactions(), [$error])
             );
         }
     }
@@ -263,13 +263,13 @@ class Payment extends PayPalResourceModel
     /**
      * Remove FailedTransactions from the list.
      * @deprecated Not publicly available
-     * @param \PayPal\Api\Error $error
+     * @param Error $error
      * @return $this
      */
     public function removeFailedTransaction($error)
     {
         return $this->setFailedTransactions(
-            array_diff($this->getFailedTransactions(), array($error))
+            array_diff($this->getFailedTransactions(), [$error])
         );
     }
 
@@ -305,10 +305,10 @@ class Payment extends PayPalResourceModel
     public function addBillingAgreementToken($billingAgreementToken)
     {
         if (!$this->getBillingAgreementTokens()) {
-            return $this->setBillingAgreementTokens(array($billingAgreementToken));
+            return $this->setBillingAgreementTokens([$billingAgreementToken]);
         } else {
             return $this->setBillingAgreementTokens(
-                array_merge($this->getBillingAgreementTokens(), array($billingAgreementToken))
+                array_merge($this->getBillingAgreementTokens(), [$billingAgreementToken])
             );
         }
     }
@@ -322,15 +322,15 @@ class Payment extends PayPalResourceModel
     public function removeBillingAgreementToken($billingAgreementToken)
     {
         return $this->setBillingAgreementTokens(
-            array_diff($this->getBillingAgreementTokens(), array($billingAgreementToken))
+            array_diff($this->getBillingAgreementTokens(), [$billingAgreementToken])
         );
     }
 
     /**
      * Credit financing offered to payer on PayPal side. Returned in payment after payer opts-in
      * @deprecated Not publicly available
-     * @param \PayPal\Api\CreditFinancingOffered $credit_financing_offered
-     * 
+     * @param CreditFinancingOffered $credit_financing_offered
+     *
      * @return $this
      */
     public function setCreditFinancingOffered($credit_financing_offered)
@@ -342,7 +342,7 @@ class Payment extends PayPalResourceModel
     /**
      * Credit financing offered to payer on PayPal side. Returned in payment after payer opts-in
      * @deprecated Not publicly available
-     * @return \PayPal\Api\CreditFinancingOffered
+     * @return CreditFinancingOffered
      */
     public function getCreditFinancingOffered()
     {
@@ -352,8 +352,8 @@ class Payment extends PayPalResourceModel
     /**
      * Instructions for the payer to complete this payment.
      * @deprecated Not publicly available
-     * @param \PayPal\Api\PaymentInstruction $payment_instruction
-     * 
+     * @param PaymentInstruction $payment_instruction
+     *
      * @return $this
      */
     public function setPaymentInstruction($payment_instruction)
@@ -365,7 +365,7 @@ class Payment extends PayPalResourceModel
     /**
      * Instructions for the payer to complete this payment.
      * @deprecated Not publicly available
-     * @return \PayPal\Api\PaymentInstruction
+     * @return PaymentInstruction
      */
     public function getPaymentInstruction()
     {
@@ -445,8 +445,8 @@ class Payment extends PayPalResourceModel
     /**
      * Set of redirect URLs you provide only for PayPal-based payments.
      *
-     * @param \PayPal\Api\RedirectUrls $redirect_urls
-     * 
+     * @param RedirectUrls $redirect_urls
+     *
      * @return $this
      */
     public function setRedirectUrls($redirect_urls)
@@ -458,7 +458,7 @@ class Payment extends PayPalResourceModel
     /**
      * Set of redirect URLs you provide only for PayPal-based payments.
      *
-     * @return \PayPal\Api\RedirectUrls
+     * @return RedirectUrls
      */
     public function getRedirectUrls()
     {
@@ -665,16 +665,7 @@ class Payment extends PayPalResourceModel
     {
         ArgumentValidator::validate($params, 'params');
         $payLoad = "";
-        $allowedParams = array(
-                    'count' => 1,
-                    'start_id' => 1,
-                    'start_index' => 1,
-                    'start_time' => 1,
-                    'end_time' => 1,
-                    'payee_id' => 1,
-                    'sort_by' => 1,
-                    'sort_order' => 1,
-        );
+        $allowedParams = ['count' => 1, 'start_id' => 1, 'start_index' => 1, 'start_time' => 1, 'end_time' => 1, 'payee_id' => 1, 'sort_by' => 1, 'sort_order' => 1];
         $json = self::executeCall(
             "/v1/payments/payment?" . http_build_query(array_intersect_key($params, $allowedParams)),
             "GET",

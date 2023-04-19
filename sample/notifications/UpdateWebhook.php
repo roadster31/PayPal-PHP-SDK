@@ -1,15 +1,17 @@
 <?php
 
+use PayPal\Api\Webhook;
+use PayPal\Api\Patch;
+use PayPal\Api\PatchRequest;
 // # Update Webhook Sample
 //
 // This sample code demonstrate how to use this call to update a webhook; supports the replace operation only, as documented here at:
 // https://developer.paypal.com/docs/api/webhooks/v1/#webhooks_update
 // API used: PATCH v1/notifications/webhooks/{webhook_id}
-
 // ## Get Webhook ID.
 // In samples we are using CreateWebhook.php sample to get the created instance of webhook.
 // However, in real case scenario, we could use just the ID from database or use an already existing webhook.
-/** @var \PayPal\Api\Webhook $webhook */
+/** @var Webhook $webhook */
 $webhook = require 'CreateWebhook.php';
 // Updating the webhook as per given request
 //
@@ -29,17 +31,17 @@ $webhook = require 'CreateWebhook.php';
 //            ]
 //         }
 //      ]
-$patch = new \PayPal\Api\Patch();
+$patch = new Patch();
 $patch->setOp("replace")
     ->setPath("/url")
     ->setValue("https://requestb.in/10ujt3c1?uniqid=". uniqid());
 
-$patch2 = new \PayPal\Api\Patch();
+$patch2 = new Patch();
 $patch2->setOp("replace")
     ->setPath("/event_types")
     ->setValue(json_decode('[{"name":"PAYMENT.SALE.REFUNDED"}]'));
 
-$patchRequest = new \PayPal\Api\PatchRequest();
+$patchRequest = new PatchRequest();
 $patchRequest->addPatch($patch)->addPatch($patch2);
 
 // ### Get Webhook

@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AuthorizationCacheTest extends TestCase
 {
-    const CACHE_FILE = 'tests/var/test.cache';
+    public const CACHE_FILE = 'tests/var/test.cache';
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -31,17 +31,12 @@ class AuthorizationCacheTest extends TestCase
 
     public static function EnabledProvider()
     {
-        return array(
-            array(array('cache.enabled' => 'true'), true),
-            array(array('cache.enabled' => true), true),
-        );
+        return [[['cache.enabled' => 'true'], true], [['cache.enabled' => true], true]];
     }
 
     public static function CachePathProvider()
     {
-        return array(
-            array(array('cache.FileName' => 'temp.cache'), 'temp.cache')
-        );
+        return [[['cache.FileName' => 'temp.cache'], 'temp.cache']];
     }
 
     /**
@@ -66,15 +61,15 @@ class AuthorizationCacheTest extends TestCase
     public function testCacheDisabled()
     {
         // 'cache.enabled' => true,
-        AuthorizationCache::push(array('cache.enabled' => false), 'clientId', 'accessToken', 'tokenCreateTime', 'tokenExpiresIn');
-        AuthorizationCache::pull(array('cache.enabled' => false), 'clientId');
+        AuthorizationCache::push(['cache.enabled' => false], 'clientId', 'accessToken', 'tokenCreateTime', 'tokenExpiresIn');
+        AuthorizationCache::pull(['cache.enabled' => false], 'clientId');
     }
 
     public function testCachePush()
     {
-        AuthorizationCache::push(array('cache.enabled' => true, 'cache.FileName' => AuthorizationCacheTest::CACHE_FILE), 'clientId', 'accessToken', 'tokenCreateTime', 'tokenExpiresIn');
+        AuthorizationCache::push(['cache.enabled' => true, 'cache.FileName' => AuthorizationCacheTest::CACHE_FILE], 'clientId', 'accessToken', 'tokenCreateTime', 'tokenExpiresIn');
         $contents = file_get_contents(AuthorizationCacheTest::CACHE_FILE);
-        $tokens = json_decode($contents, true);
+        $tokens = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
         $this->assertNotNull($contents);
         $this->assertEquals('clientId', $tokens['clientId']['clientId']);
         $this->assertEquals('accessToken', $tokens['clientId']['accessTokenEncrypted']);
@@ -84,7 +79,7 @@ class AuthorizationCacheTest extends TestCase
 
     public function testCachePullNonExisting()
     {
-        $result = AuthorizationCache::pull(array('cache.enabled' => true, 'cache.FileName' => AuthorizationCacheTest::CACHE_FILE), 'clientIdUndefined');
+        $result = AuthorizationCache::pull(['cache.enabled' => true, 'cache.FileName' => AuthorizationCacheTest::CACHE_FILE], 'clientIdUndefined');
         $this->assertNull($result);
     }
 
@@ -93,7 +88,7 @@ class AuthorizationCacheTest extends TestCase
      */
     public function testCachePull()
     {
-        $result = AuthorizationCache::pull(array('cache.enabled' => true, 'cache.FileName' => AuthorizationCacheTest::CACHE_FILE), 'clientId');
+        $result = AuthorizationCache::pull(['cache.enabled' => true, 'cache.FileName' => AuthorizationCacheTest::CACHE_FILE], 'clientId');
         $this->assertNotNull($result);
         $this->assertInternalType('array', $result);
         $this->assertEquals('clientId', $result['clientId']);

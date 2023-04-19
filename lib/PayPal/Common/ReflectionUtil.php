@@ -2,6 +2,8 @@
 
 namespace PayPal\Common;
 
+use ReflectionMethod;
+use RuntimeException;
 use PayPal\Exception\PayPalConfigurationException;
 
 /**
@@ -15,16 +17,16 @@ class ReflectionUtil
     /**
      * Reflection Methods
      *
-     * @var \ReflectionMethod[]
+     * @var ReflectionMethod[]
      */
-    private static $propertiesRefl = array();
+    private static array $propertiesRefl = [];
 
     /**
      * Properties Type
      *
      * @var string[]
      */
-    private static $propertiesType = array();
+    private static array $propertiesType = [];
 
 
     /**
@@ -39,9 +41,9 @@ class ReflectionUtil
      */
     public static function getPropertyClass($class, $propertyName)
     {
-        if ($class == get_class(new PayPalModel())) {
+        if ($class == (new PayPalModel())::class) {
             // Make it generic if PayPalModel is used for generating this
-            return get_class(new PayPalModel());
+            return (new PayPalModel())::class;
         }
 
         // If the class doesn't exist, or the method doesn't exist, return null.
@@ -81,7 +83,7 @@ class ReflectionUtil
         }
 
         if (isset($param)) {
-            return substr($param, -strlen('[]'))==='[]';
+            return str_ends_with($param, '[]');
         } else {
             throw new PayPalConfigurationException("Getter function for '$propertyName' in '$class' class should have a proper return type.");
         }
@@ -92,14 +94,14 @@ class ReflectionUtil
      *
      * @param $class
      * @param $propertyName
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @return mixed
      */
     public static function propertyAnnotations($class, $propertyName)
     {
-        $class = is_object($class) ? get_class($class) : $class;
+        $class = is_object($class) ? $class::class : $class;
         if (!class_exists('ReflectionProperty')) {
-            throw new \RuntimeException("Property type of " . $class . "::{$propertyName} cannot be resolved");
+            throw new RuntimeException("Property type of " . $class . "::{$propertyName} cannot be resolved");
         }
 
         if ($annotations =& self::$propertiesType[$class][$propertyName]) {
@@ -108,7 +110,7 @@ class ReflectionUtil
 
         if (!($refl =& self::$propertiesRefl[$class][$propertyName])) {
             $getter = self::getter($class, $propertyName);
-            $refl = new \ReflectionMethod($class, $getter);
+            $refl = new ReflectionMethod($class, $getter);
             self::$propertiesRefl[$class][$propertyName] = $refl;
         }
 
