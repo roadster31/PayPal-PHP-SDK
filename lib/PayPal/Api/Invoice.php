@@ -2,6 +2,7 @@
 
 namespace PayPal\Api;
 
+use InvalidArgumentException;
 use PayPal\Common\PayPalResourceModel;
 use PayPal\Rest\ApiContext;
 use PayPal\Transport\PayPalRestCall;
@@ -168,8 +169,8 @@ class Invoice extends PayPalResourceModel
     /**
      * Information about the merchant who is sending the invoice.
      *
-     * @param \PayPal\Api\MerchantInfo $merchant_info
-     * 
+     * @param MerchantInfo $merchant_info
+     *
      * @return $this
      */
     public function setMerchantInfo($merchant_info)
@@ -181,7 +182,7 @@ class Invoice extends PayPalResourceModel
     /**
      * Information about the merchant who is sending the invoice.
      *
-     * @return \PayPal\Api\MerchantInfo
+     * @return MerchantInfo
      */
     public function getMerchantInfo()
     {
@@ -191,8 +192,8 @@ class Invoice extends PayPalResourceModel
     /**
      * The required invoice recipient email address and any optional billing information. One recipient is supported.
      *
-     * @param \PayPal\Api\BillingInfo[] $billing_info
-     * 
+     * @param BillingInfo[] $billing_info
+     *
      * @return $this
      */
     public function setBillingInfo($billing_info)
@@ -204,7 +205,7 @@ class Invoice extends PayPalResourceModel
     /**
      * The required invoice recipient email address and any optional billing information. One recipient is supported.
      *
-     * @return \PayPal\Api\BillingInfo[]
+     * @return BillingInfo[]
      */
     public function getBillingInfo()
     {
@@ -214,16 +215,16 @@ class Invoice extends PayPalResourceModel
     /**
      * Append BillingInfo to the list.
      *
-     * @param \PayPal\Api\BillingInfo $billingInfo
+     * @param BillingInfo $billingInfo
      * @return $this
      */
     public function addBillingInfo($billingInfo)
     {
         if (!$this->getBillingInfo()) {
-            return $this->setBillingInfo(array($billingInfo));
+            return $this->setBillingInfo([$billingInfo]);
         } else {
             return $this->setBillingInfo(
-                array_merge($this->getBillingInfo(), array($billingInfo))
+                array_merge($this->getBillingInfo(), [$billingInfo])
             );
         }
     }
@@ -231,21 +232,21 @@ class Invoice extends PayPalResourceModel
     /**
      * Remove BillingInfo from the list.
      *
-     * @param \PayPal\Api\BillingInfo $billingInfo
+     * @param BillingInfo $billingInfo
      * @return $this
      */
     public function removeBillingInfo($billingInfo)
     {
         return $this->setBillingInfo(
-            array_diff($this->getBillingInfo(), array($billingInfo))
+            array_diff($this->getBillingInfo(), [$billingInfo])
         );
     }
 
     /**
      * For invoices sent by email, one or more email addresses to which to send a Cc: copy of the notification. Supports only email addresses under participant.
      *
-     * @param \PayPal\Api\Participant[] $cc_info
-     * 
+     * @param Participant[] $cc_info
+     *
      * @return $this
      */
     public function setCcInfo($cc_info)
@@ -257,7 +258,7 @@ class Invoice extends PayPalResourceModel
     /**
      * For invoices sent by email, one or more email addresses to which to send a Cc: copy of the notification. Supports only email addresses under participant.
      *
-     * @return \PayPal\Api\Participant[]
+     * @return Participant[]
      */
     public function getCcInfo()
     {
@@ -267,16 +268,16 @@ class Invoice extends PayPalResourceModel
     /**
      * Append CcInfo to the list.
      *
-     * @param \PayPal\Api\Participant $participant
+     * @param Participant $participant
      * @return $this
      */
     public function addCcInfo($participant)
     {
         if (!$this->getCcInfo()) {
-            return $this->setCcInfo(array($participant));
+            return $this->setCcInfo([$participant]);
         } else {
             return $this->setCcInfo(
-                array_merge($this->getCcInfo(), array($participant))
+                array_merge($this->getCcInfo(), [$participant])
             );
         }
     }
@@ -284,21 +285,21 @@ class Invoice extends PayPalResourceModel
     /**
      * Remove CcInfo from the list.
      *
-     * @param \PayPal\Api\Participant $participant
+     * @param Participant $participant
      * @return $this
      */
     public function removeCcInfo($participant)
     {
         return $this->setCcInfo(
-            array_diff($this->getCcInfo(), array($participant))
+            array_diff($this->getCcInfo(), [$participant])
         );
     }
 
     /**
      * The shipping information for entities to whom items are being shipped.
      *
-     * @param \PayPal\Api\ShippingInfo $shipping_info
-     * 
+     * @param ShippingInfo $shipping_info
+     *
      * @return $this
      */
     public function setShippingInfo($shipping_info)
@@ -310,7 +311,7 @@ class Invoice extends PayPalResourceModel
     /**
      * The shipping information for entities to whom items are being shipped.
      *
-     * @return \PayPal\Api\ShippingInfo
+     * @return ShippingInfo
      */
     public function getShippingInfo()
     {
@@ -320,8 +321,8 @@ class Invoice extends PayPalResourceModel
     /**
      * The list of items to include in the invoice. Maximum value is 100 items per invoice.
      *
-     * @param \PayPal\Api\InvoiceItem[] $items
-     * 
+     * @param InvoiceItem[] $items
+     *
      * @return $this
      */
     public function setItems($items)
@@ -333,7 +334,7 @@ class Invoice extends PayPalResourceModel
     /**
      * The list of items to include in the invoice. Maximum value is 100 items per invoice.
      *
-     * @return \PayPal\Api\InvoiceItem[]
+     * @return InvoiceItem[]
      */
     public function getItems()
     {
@@ -343,16 +344,16 @@ class Invoice extends PayPalResourceModel
     /**
      * Append Items to the list.
      *
-     * @param \PayPal\Api\InvoiceItem $invoiceItem
+     * @param InvoiceItem $invoiceItem
      * @return $this
      */
     public function addItem($invoiceItem)
     {
         if (!$this->getItems()) {
-            return $this->setItems(array($invoiceItem));
+            return $this->setItems([$invoiceItem]);
         } else {
             return $this->setItems(
-                array_merge($this->getItems(), array($invoiceItem))
+                array_merge($this->getItems(), [$invoiceItem])
             );
         }
     }
@@ -360,13 +361,13 @@ class Invoice extends PayPalResourceModel
     /**
      * Remove Items from the list.
      *
-     * @param \PayPal\Api\InvoiceItem $invoiceItem
+     * @param InvoiceItem $invoiceItem
      * @return $this
      */
     public function removeItem($invoiceItem)
     {
         return $this->setItems(
-            array_diff($this->getItems(), array($invoiceItem))
+            array_diff($this->getItems(), [$invoiceItem])
         );
     }
 
@@ -396,8 +397,8 @@ class Invoice extends PayPalResourceModel
     /**
      * Optional. The payment deadline for the invoice. Value is either `term_type` or `due_date` but not both.
      *
-     * @param \PayPal\Api\PaymentTerm $payment_term
-     * 
+     * @param PaymentTerm $payment_term
+     *
      * @return $this
      */
     public function setPaymentTerm($payment_term)
@@ -409,7 +410,7 @@ class Invoice extends PayPalResourceModel
     /**
      * Optional. The payment deadline for the invoice. Value is either `term_type` or `due_date` but not both.
      *
-     * @return \PayPal\Api\PaymentTerm
+     * @return PaymentTerm
      */
     public function getPaymentTerm()
     {
@@ -442,8 +443,8 @@ class Invoice extends PayPalResourceModel
     /**
      * The invoice level discount, as a percent or an amount value.
      *
-     * @param \PayPal\Api\Cost $discount
-     * 
+     * @param Cost $discount
+     *
      * @return $this
      */
     public function setDiscount($discount)
@@ -455,7 +456,7 @@ class Invoice extends PayPalResourceModel
     /**
      * The invoice level discount, as a percent or an amount value.
      *
-     * @return \PayPal\Api\Cost
+     * @return Cost
      */
     public function getDiscount()
     {
@@ -465,8 +466,8 @@ class Invoice extends PayPalResourceModel
     /**
      * The shipping cost, as a percent or an amount value.
      *
-     * @param \PayPal\Api\ShippingCost $shipping_cost
-     * 
+     * @param ShippingCost $shipping_cost
+     *
      * @return $this
      */
     public function setShippingCost($shipping_cost)
@@ -478,7 +479,7 @@ class Invoice extends PayPalResourceModel
     /**
      * The shipping cost, as a percent or an amount value.
      *
-     * @return \PayPal\Api\ShippingCost
+     * @return ShippingCost
      */
     public function getShippingCost()
     {
@@ -488,8 +489,8 @@ class Invoice extends PayPalResourceModel
     /**
      * The custom amount to apply on an invoice. If you include a label, the amount cannot be empty.
      *
-     * @param \PayPal\Api\CustomAmount $custom
-     * 
+     * @param CustomAmount $custom
+     *
      * @return $this
      */
     public function setCustom($custom)
@@ -501,7 +502,7 @@ class Invoice extends PayPalResourceModel
     /**
      * The custom amount to apply on an invoice. If you include a label, the amount cannot be empty.
      *
-     * @return \PayPal\Api\CustomAmount
+     * @return CustomAmount
      */
     public function getCustom()
     {
@@ -534,8 +535,8 @@ class Invoice extends PayPalResourceModel
     /**
      * If `allow_partial_payment` is set to `true`, the minimum amount allowed for a partial payment.
      *
-     * @param \PayPal\Api\Currency $minimum_amount_due
-     * 
+     * @param Currency $minimum_amount_due
+     *
      * @return $this
      */
     public function setMinimumAmountDue($minimum_amount_due)
@@ -547,7 +548,7 @@ class Invoice extends PayPalResourceModel
     /**
      * If `allow_partial_payment` is set to `true`, the minimum amount allowed for a partial payment.
      *
-     * @return \PayPal\Api\Currency
+     * @return Currency
      */
     public function getMinimumAmountDue()
     {
@@ -673,7 +674,7 @@ class Invoice extends PayPalResourceModel
      * Full URL of an external image to use as the logo. Maximum length is 4000 characters.
      *
      * @param string $logo_url
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return $this
      */
     public function setLogoUrl($logo_url)
@@ -696,8 +697,8 @@ class Invoice extends PayPalResourceModel
     /**
      * The total amount of the invoice.
      *
-     * @param \PayPal\Api\Currency $total_amount
-     * 
+     * @param Currency $total_amount
+     *
      * @return $this
      */
     public function setTotalAmount($total_amount)
@@ -709,7 +710,7 @@ class Invoice extends PayPalResourceModel
     /**
      * The total amount of the invoice.
      *
-     * @return \PayPal\Api\Currency
+     * @return Currency
      */
     public function getTotalAmount()
     {
@@ -719,8 +720,8 @@ class Invoice extends PayPalResourceModel
     /**
      * List of payment details for the invoice.
      *
-     * @param \PayPal\Api\PaymentDetail[] $payments
-     * 
+     * @param PaymentDetail[] $payments
+     *
      * @return $this
      */
     public function setPayments($payments)
@@ -732,7 +733,7 @@ class Invoice extends PayPalResourceModel
     /**
      * List of payment details for the invoice.
      *
-     * @return \PayPal\Api\PaymentDetail[]
+     * @return PaymentDetail[]
      */
     public function getPayments()
     {
@@ -742,16 +743,16 @@ class Invoice extends PayPalResourceModel
     /**
      * Append Payments to the list.
      *
-     * @param \PayPal\Api\PaymentDetail $paymentDetail
+     * @param PaymentDetail $paymentDetail
      * @return $this
      */
     public function addPayment($paymentDetail)
     {
         if (!$this->getPayments()) {
-            return $this->setPayments(array($paymentDetail));
+            return $this->setPayments([$paymentDetail]);
         } else {
             return $this->setPayments(
-                array_merge($this->getPayments(), array($paymentDetail))
+                array_merge($this->getPayments(), [$paymentDetail])
             );
         }
     }
@@ -759,21 +760,21 @@ class Invoice extends PayPalResourceModel
     /**
      * Remove Payments from the list.
      *
-     * @param \PayPal\Api\PaymentDetail $paymentDetail
+     * @param PaymentDetail $paymentDetail
      * @return $this
      */
     public function removePayment($paymentDetail)
     {
         return $this->setPayments(
-            array_diff($this->getPayments(), array($paymentDetail))
+            array_diff($this->getPayments(), [$paymentDetail])
         );
     }
 
     /**
      * List of refund details for the invoice.
      *
-     * @param \PayPal\Api\RefundDetail[] $refunds
-     * 
+     * @param RefundDetail[] $refunds
+     *
      * @return $this
      */
     public function setRefunds($refunds)
@@ -785,7 +786,7 @@ class Invoice extends PayPalResourceModel
     /**
      * List of refund details for the invoice.
      *
-     * @return \PayPal\Api\RefundDetail[]
+     * @return RefundDetail[]
      */
     public function getRefunds()
     {
@@ -795,16 +796,16 @@ class Invoice extends PayPalResourceModel
     /**
      * Append Refunds to the list.
      *
-     * @param \PayPal\Api\RefundDetail $refundDetail
+     * @param RefundDetail $refundDetail
      * @return $this
      */
     public function addRefund($refundDetail)
     {
         if (!$this->getRefunds()) {
-            return $this->setRefunds(array($refundDetail));
+            return $this->setRefunds([$refundDetail]);
         } else {
             return $this->setRefunds(
-                array_merge($this->getRefunds(), array($refundDetail))
+                array_merge($this->getRefunds(), [$refundDetail])
             );
         }
     }
@@ -812,21 +813,21 @@ class Invoice extends PayPalResourceModel
     /**
      * Remove Refunds from the list.
      *
-     * @param \PayPal\Api\RefundDetail $refundDetail
+     * @param RefundDetail $refundDetail
      * @return $this
      */
     public function removeRefund($refundDetail)
     {
         return $this->setRefunds(
-            array_diff($this->getRefunds(), array($refundDetail))
+            array_diff($this->getRefunds(), [$refundDetail])
         );
     }
 
     /**
      * Audit information for the invoice.
      *
-     * @param \PayPal\Api\Metadata $metadata
-     * 
+     * @param Metadata $metadata
+     *
      * @return $this
      */
     public function setMetadata($metadata)
@@ -838,7 +839,7 @@ class Invoice extends PayPalResourceModel
     /**
      * Audit information for the invoice.
      *
-     * @return \PayPal\Api\Metadata
+     * @return Metadata
      */
     public function getMetadata()
     {
@@ -871,8 +872,8 @@ class Invoice extends PayPalResourceModel
     /**
      * Payment summary of the invoice including amount paid through PayPal and other sources.
      *
-     * @param \PayPal\Api\PaymentSummary $paid_amount
-     * 
+     * @param PaymentSummary $paid_amount
+     *
      * @return $this
      */
     public function setPaidAmount($paid_amount)
@@ -884,7 +885,7 @@ class Invoice extends PayPalResourceModel
     /**
      * Payment summary of the invoice including amount paid through PayPal and other sources.
      *
-     * @return \PayPal\Api\PaymentSummary
+     * @return PaymentSummary
      */
     public function getPaidAmount()
     {
@@ -894,8 +895,8 @@ class Invoice extends PayPalResourceModel
     /**
      * Payment summary of the invoice including amount refunded through PayPal and other sources.
      *
-     * @param \PayPal\Api\PaymentSummary $refunded_amount
-     * 
+     * @param PaymentSummary $refunded_amount
+     *
      * @return $this
      */
     public function setRefundedAmount($refunded_amount)
@@ -907,7 +908,7 @@ class Invoice extends PayPalResourceModel
     /**
      * Payment summary of the invoice including amount refunded through PayPal and other sources.
      *
-     * @return \PayPal\Api\PaymentSummary
+     * @return PaymentSummary
      */
     public function getRefundedAmount()
     {
@@ -917,8 +918,8 @@ class Invoice extends PayPalResourceModel
     /**
      * List of files attached to the invoice.
      *
-     * @param \PayPal\Api\FileAttachment[] $attachments
-     * 
+     * @param FileAttachment[] $attachments
+     *
      * @return $this
      */
     public function setAttachments($attachments)
@@ -930,7 +931,7 @@ class Invoice extends PayPalResourceModel
     /**
      * List of files attached to the invoice.
      *
-     * @return \PayPal\Api\FileAttachment[]
+     * @return FileAttachment[]
      */
     public function getAttachments()
     {
@@ -940,16 +941,16 @@ class Invoice extends PayPalResourceModel
     /**
      * Append Attachments to the list.
      *
-     * @param \PayPal\Api\FileAttachment $fileAttachment
+     * @param FileAttachment $fileAttachment
      * @return $this
      */
     public function addAttachment($fileAttachment)
     {
         if (!$this->getAttachments()) {
-            return $this->setAttachments(array($fileAttachment));
+            return $this->setAttachments([$fileAttachment]);
         } else {
             return $this->setAttachments(
-                array_merge($this->getAttachments(), array($fileAttachment))
+                array_merge($this->getAttachments(), [$fileAttachment])
             );
         }
     }
@@ -957,13 +958,13 @@ class Invoice extends PayPalResourceModel
     /**
      * Remove Attachments from the list.
      *
-     * @param \PayPal\Api\FileAttachment $fileAttachment
+     * @param FileAttachment $fileAttachment
      * @return $this
      */
     public function removeAttachment($fileAttachment)
     {
         return $this->setAttachments(
-            array_diff($this->getAttachments(), array($fileAttachment))
+            array_diff($this->getAttachments(), [$fileAttachment])
         );
     }
 
@@ -1165,15 +1166,11 @@ class Invoice extends PayPalResourceModel
      * @param PayPalRestCall $restCall is the Rest Call Service that is used to make rest calls
      * @return InvoiceSearchResponse
      */
-    public static function getAll($params = array(), $apiContext = null, $restCall = null)
+    public static function getAll($params = [], $apiContext = null, $restCall = null)
     {
         ArgumentValidator::validate($params, 'params');
 
-        $allowedParams = array(
-            'page' => 1,
-            'page_size' => 1,
-            'total_count_required' => 1
-        );
+        $allowedParams = ['page' => 1, 'page_size' => 1, 'total_count_required' => 1];
 
         $payLoad = "";
         $json = self::executeCall(
@@ -1289,16 +1286,12 @@ class Invoice extends PayPalResourceModel
      * @param PayPalRestCall $restCall is the Rest Call Service that is used to make rest calls
      * @return Image
      */
-    public static function qrCode($invoiceId, $params = array(), $apiContext = null, $restCall = null)
+    public static function qrCode($invoiceId, $params = [], $apiContext = null, $restCall = null)
     {
         ArgumentValidator::validate($invoiceId, 'invoiceId');
         ArgumentValidator::validate($params, 'params');
 
-        $allowedParams = array(
-            'width' => 1,
-            'height' => 1,
-            'action' => 1
-        );
+        $allowedParams = ['width' => 1, 'height' => 1, 'action' => 1];
 
         $payLoad = "";
         $json = self::executeCall(

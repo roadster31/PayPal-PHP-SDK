@@ -16,7 +16,7 @@ try {
     // on the Invoice class by passing a valid
     // notification object
     // (See bootstrap.php for more on `ApiContext`)
-    $image = Invoice::qrCode($invoice->getId(), array('height' => '300', 'width' => '300'), $apiContext);
+    $image = Invoice::qrCode($invoice->getId(), ['height' => '300', 'width' => '300'], $apiContext);
 
     // ### Optionally Save to File
     // This is not a required step. However, if you want to store this image as a file, you can use

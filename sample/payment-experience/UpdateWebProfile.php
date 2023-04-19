@@ -1,12 +1,12 @@
 <?php
 
+use PayPal\Api\WebProfile;
 // #### Update Web Profile
 // Use this call to update an experience profile.
 // Documentation available at https://developer.paypal.com/docs/api/#update-a-web-experience-profile
-
 // We will be re-using the sample code to get a web profile. GetWebProfile.php will
 // create a new web profileId for sample, and return the web profile object.
-/** @var \PayPal\Api\WebProfile $webProfile */
+/** @var WebProfile $webProfile */
 $webProfile = require 'GetWebProfile.php';
 
 
@@ -18,9 +18,9 @@ try {
     if ($webProfile->update($apiContext)) {
         // If the update is successfull, we can now get the object, and verify the web profile
         // object
-        $updatedWebProfile = \PayPal\Api\WebProfile::get($webProfile->getId(), $apiContext);
+        $updatedWebProfile = WebProfile::get($webProfile->getId(), $apiContext);
     }
-} catch (\Exception $ex) {
+} catch (Exception $ex) {
     // NOTE: PLEASE DO NOT USE RESULTPRINTER CLASS IN YOUR ORIGINAL CODE. FOR SAMPLE ONLY
     ResultPrinter::printError("Updated Web Profile", "Web Profile", $webProfile->getId(), $webProfile, $ex);
     exit(1);

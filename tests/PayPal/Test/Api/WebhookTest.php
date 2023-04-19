@@ -2,6 +2,7 @@
 
 namespace PayPal\Test\Api;
 
+use PayPal\Transport\PayPalRestCall;
 use PayPal\Common\PayPalResourceModel;
 use PayPal\Validation\ArgumentValidator;
 use PayPal\Api\WebhookList;
@@ -78,7 +79,7 @@ class WebhookTest extends TestCase
      */
     public function testCreate($obj, $mockApiContext)
     {
-        $mockPPRestCall = $this->getMockBuilder('\PayPal\Transport\PayPalRestCall')
+        $mockPPRestCall = $this->getMockBuilder('\\' . PayPalRestCall::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -97,7 +98,7 @@ class WebhookTest extends TestCase
      */
     public function testGet($obj, $mockApiContext)
     {
-        $mockPPRestCall = $this->getMockBuilder('\PayPal\Transport\PayPalRestCall')
+        $mockPPRestCall = $this->getMockBuilder('\\' . PayPalRestCall::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -116,7 +117,7 @@ class WebhookTest extends TestCase
      */
     public function testGetAll($obj, $mockApiContext)
     {
-        $mockPPRestCall = $this->getMockBuilder('\PayPal\Transport\PayPalRestCall')
+        $mockPPRestCall = $this->getMockBuilder('\\' . PayPalRestCall::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -125,7 +126,7 @@ class WebhookTest extends TestCase
             ->will($this->returnValue(
                     WebhookListTest::getJson()
             ));
-        $params = array();
+        $params = [];
 
         $result = $obj->getAllWithParams($params, $mockApiContext, $mockPPRestCall);
         $this->assertNotNull($result);
@@ -136,7 +137,7 @@ class WebhookTest extends TestCase
      */
     public function testUpdate($obj, $mockApiContext)
     {
-        $mockPPRestCall = $this->getMockBuilder('\PayPal\Transport\PayPalRestCall')
+        $mockPPRestCall = $this->getMockBuilder('\\' . PayPalRestCall::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -156,7 +157,7 @@ class WebhookTest extends TestCase
      */
     public function testDelete($obj, $mockApiContext)
     {
-        $mockPPRestCall = $this->getMockBuilder('\PayPal\Transport\PayPalRestCall')
+        $mockPPRestCall = $this->getMockBuilder('\\' . PayPalRestCall::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -176,9 +177,6 @@ class WebhookTest extends TestCase
         $mockApiContext = $this->getMockBuilder('ApiContext')
                     ->disableOriginalConstructor()
                     ->getMock();
-        return array(
-            array($obj, $mockApiContext),
-            array($obj, null)
-        );
+        return [[$obj, $mockApiContext], [$obj, null]];
     }
 }

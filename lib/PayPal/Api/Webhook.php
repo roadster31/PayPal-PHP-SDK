@@ -2,6 +2,7 @@
 
 namespace PayPal\Api;
 
+use InvalidArgumentException;
 use PayPal\Common\PayPalResourceModel;
 use PayPal\Validation\ArgumentValidator;
 use PayPal\Api\WebhookList;
@@ -48,7 +49,7 @@ class Webhook extends PayPalResourceModel
      * The URL that is configured to listen on `localhost` for incoming `POST` notification messages that contain event information.
      *
      * @param string $url
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return $this
      */
     public function setUrl($url)
@@ -71,8 +72,8 @@ class Webhook extends PayPalResourceModel
     /**
      * A list of up to ten events to which to subscribe your webhook. To subscribe to all events including new events as they are added, specify the asterisk (`*`) wildcard. To replace the `event_types` array, specify the `*` wildcard. To see all supported events, [list available events](#available-event-type.list).
      *
-     * @param \PayPal\Api\WebhookEventType[] $event_types
-     * 
+     * @param WebhookEventType[] $event_types
+     *
      * @return $this
      */
     public function setEventTypes($event_types)
@@ -84,7 +85,7 @@ class Webhook extends PayPalResourceModel
     /**
      * A list of up to ten events to which to subscribe your webhook. To subscribe to all events including new events as they are added, specify the asterisk (`*`) wildcard. To replace the `event_types` array, specify the `*` wildcard. To see all supported events, [list available events](#available-event-type.list).
      *
-     * @return \PayPal\Api\WebhookEventType[]
+     * @return WebhookEventType[]
      */
     public function getEventTypes()
     {
@@ -94,16 +95,16 @@ class Webhook extends PayPalResourceModel
     /**
      * Append EventTypes to the list.
      *
-     * @param \PayPal\Api\WebhookEventType $webhookEventType
+     * @param WebhookEventType $webhookEventType
      * @return $this
      */
     public function addEventType($webhookEventType)
     {
         if (!$this->getEventTypes()) {
-            return $this->setEventTypes(array($webhookEventType));
+            return $this->setEventTypes([$webhookEventType]);
         } else {
             return $this->setEventTypes(
-                array_merge($this->getEventTypes(), array($webhookEventType))
+                array_merge($this->getEventTypes(), [$webhookEventType])
             );
         }
     }
@@ -111,13 +112,13 @@ class Webhook extends PayPalResourceModel
     /**
      * Remove EventTypes from the list.
      *
-     * @param \PayPal\Api\WebhookEventType $webhookEventType
+     * @param WebhookEventType $webhookEventType
      * @return $this
      */
     public function removeEventType($webhookEventType)
     {
         return $this->setEventTypes(
-            array_diff($this->getEventTypes(), array($webhookEventType))
+            array_diff($this->getEventTypes(), [$webhookEventType])
         );
     }
 
@@ -179,7 +180,7 @@ class Webhook extends PayPalResourceModel
      */
     public static function getAll($apiContext = null, $restCall = null)
     {
-        return self::getAllWithParams(array(), $apiContext, $restCall);
+        return self::getAllWithParams([], $apiContext, $restCall);
     }
 
     /**
@@ -190,13 +191,11 @@ class Webhook extends PayPalResourceModel
      * @param PayPalRestCall $restCall is the Rest Call Service that is used to make rest calls
      * @return WebhookList
      */
-    public static function getAllWithParams($params = array(), $apiContext = null, $restCall = null)
+    public static function getAllWithParams($params = [], $apiContext = null, $restCall = null)
     {
         ArgumentValidator::validate($params, 'params');
         $payLoad = "";
-        $allowedParams = array(
-            'anchor_type' => 1,
-        );
+        $allowedParams = ['anchor_type' => 1];
         $json = self::executeCall(
             "/v1/notifications/webhooks?" . http_build_query(array_intersect_key($params, $allowedParams)),
             "GET",

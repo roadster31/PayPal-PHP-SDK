@@ -13,9 +13,9 @@ use PayPal\Common\PayPalModel;
  *
  * @property string payment_method
  * @property string status
- * @property \PayPal\Api\FundingInstrument[] funding_instruments
+ * @property FundingInstrument[] funding_instruments
  * @property string external_selected_funding_instrument_type
- * @property \PayPal\Api\PayerInfo payer_info
+ * @property PayerInfo payer_info
  */
 class Payer extends PayPalModel
 {
@@ -119,7 +119,7 @@ class Payer extends PayPalModel
     /**
      * List of funding instruments to fund the payment. 'OneOf' funding_instruments,funding_option_id to be used to identify the specifics of payment method passed.
      *
-     * @param \PayPal\Api\FundingInstrument[] $funding_instruments
+     * @param FundingInstrument[] $funding_instruments
      * 
      * @return $this
      */
@@ -132,7 +132,7 @@ class Payer extends PayPalModel
     /**
      * List of funding instruments to fund the payment. 'OneOf' funding_instruments,funding_option_id to be used to identify the specifics of payment method passed.
      *
-     * @return \PayPal\Api\FundingInstrument[]
+     * @return FundingInstrument[]
      */
     public function getFundingInstruments()
     {
@@ -142,7 +142,7 @@ class Payer extends PayPalModel
     /**
      * Append FundingInstruments to the list.
      *
-     * @param \PayPal\Api\FundingInstrument $fundingInstrument
+     * @param FundingInstrument $fundingInstrument
      * @return $this
      */
     public function addFundingInstrument($fundingInstrument)
@@ -159,7 +159,7 @@ class Payer extends PayPalModel
     /**
      * Remove FundingInstruments from the list.
      *
-     * @param \PayPal\Api\FundingInstrument $fundingInstrument
+     * @param FundingInstrument $fundingInstrument
      * @return $this
      */
     public function removeFundingInstrument($fundingInstrument)
@@ -265,7 +265,7 @@ class Payer extends PayPalModel
     /**
      * Information related to the Payer. 
      *
-     * @param \PayPal\Api\PayerInfo $payer_info
+     * @param PayerInfo $payer_info
      * 
      * @return $this
      */
@@ -278,7 +278,7 @@ class Payer extends PayPalModel
     /**
      * Information related to the Payer. 
      *
-     * @return \PayPal\Api\PayerInfo
+     * @return PayerInfo
      */
     public function getPayerInfo()
     {

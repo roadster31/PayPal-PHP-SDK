@@ -16,7 +16,7 @@ $agreementId = $agreement->getId();
 use PayPal\Api\Agreement;
 
 // Adding Params to search transaction within a given time frame.
-$params = array('start_date' => date('Y-m-d', strtotime('-15 years')), 'end_date' => date('Y-m-d', strtotime('+5 days')));
+$params = ['start_date' => date('Y-m-d', strtotime('-15 years')), 'end_date' => date('Y-m-d', strtotime('+5 days'))];
 
 try {
     $result = Agreement::searchTransactions($agreementId, $params, $apiContext);

@@ -42,8 +42,8 @@ class AgreementStateDescriptor extends PayPalModel
     /**
      * The amount and currency of the agreement.
      *
-     * @param \PayPal\Api\Currency $amount
-     * 
+     * @param Currency $amount
+     *
      * @return $this
      */
     public function setAmount($amount)
@@ -55,7 +55,7 @@ class AgreementStateDescriptor extends PayPalModel
     /**
      * The amount and currency of the agreement.
      *
-     * @return \PayPal\Api\Currency
+     * @return Currency
      */
     public function getAmount()
     {

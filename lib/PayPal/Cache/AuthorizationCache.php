@@ -2,6 +2,7 @@
 
 namespace PayPal\Cache;
 
+use Exception;
 use PayPal\Core\PayPalConfigManager;
 use PayPal\Validation\JsonValidator;
 
@@ -30,7 +31,7 @@ abstract class AuthorizationCache
             // Read from the file
             $cachedToken = file_get_contents($cachePath);
             if ($cachedToken && JsonValidator::validate($cachedToken, true)) {
-                $tokens = json_decode($cachedToken, true);
+                $tokens = json_decode($cachedToken, true, 512, JSON_THROW_ON_ERROR);
                 if ($clientId && is_array($tokens) && array_key_exists($clientId, $tokens)) {
                     // If client Id is found, just send in that data only
                     return $tokens[$clientId];
@@ -51,9 +52,9 @@ abstract class AuthorizationCache
      * @param      $accessToken
      * @param      $tokenCreateTime
      * @param      $tokenExpiresIn
-     * @throws \Exception
+     * @throws Exception
      */
-    public static function push($config = null, $clientId, $accessToken, $tokenCreateTime, $tokenExpiresIn)
+    public static function push($clientId, $accessToken, $tokenCreateTime, $tokenExpiresIn, $config = null)
     {
         // Return if not enabled
         if (!self::isEnabled($config)) {
@@ -63,23 +64,18 @@ abstract class AuthorizationCache
         $cachePath = self::cachePath($config);
         if (!is_dir(dirname($cachePath))) {
             if (mkdir(dirname($cachePath), 0755, true) == false) {
-                throw new \Exception("Failed to create directory at $cachePath");
+                throw new Exception("Failed to create directory at $cachePath");
             }
         }
 
         // Reads all the existing persisted data
         $tokens = self::pull();
-        $tokens = $tokens ? $tokens : array();
+        $tokens = $tokens ?: [];
         if (is_array($tokens)) {
-            $tokens[$clientId] = array(
-                'clientId' => $clientId,
-                'accessTokenEncrypted' => $accessToken,
-                'tokenCreateTime' => $tokenCreateTime,
-                'tokenExpiresIn' => $tokenExpiresIn
-            );
+            $tokens[$clientId] = ['clientId' => $clientId, 'accessTokenEncrypted' => $accessToken, 'tokenCreateTime' => $tokenCreateTime, 'tokenExpiresIn' => $tokenExpiresIn];
         }
-        if (!file_put_contents($cachePath, json_encode($tokens))) {
-            throw new \Exception("Failed to write cache");
+        if (!file_put_contents($cachePath, json_encode($tokens, JSON_THROW_ON_ERROR))) {
+            throw new Exception("Failed to write cache");
         };
     }
 

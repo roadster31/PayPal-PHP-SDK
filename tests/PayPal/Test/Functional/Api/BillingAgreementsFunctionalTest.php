@@ -37,10 +37,10 @@ class BillingAgreementsFunctionalTest extends TestCase
     public function setupTest($className, $testName)
     {
         $operationString = file_get_contents(__DIR__ . "/../resources/$className/$testName.json");
-        $this->operation = json_decode($operationString, true);
+        $this->operation = json_decode($operationString, true, 512, JSON_THROW_ON_ERROR);
         $this->response = true;
         if (array_key_exists('body', $this->operation['response'])) {
-            $this->response = json_encode($this->operation['response']['body']);
+            $this->response = json_encode($this->operation['response']['body'], JSON_THROW_ON_ERROR);
         }
         Setup::SetUpForFunctionalTests($this);
     }
@@ -51,7 +51,7 @@ class BillingAgreementsFunctionalTest extends TestCase
      */
     public function getClassName()
     {
-        return join('', array_slice(explode('\\', get_class($this)), -1));
+        return join('', array_slice(explode('\\', static::class), -1));
     }
 
     /**
@@ -129,7 +129,7 @@ class BillingAgreementsFunctionalTest extends TestCase
         $patch->setOp($request['op']);
         $patch->setPath($request['path']);
         $patch->setValue($request['value']);
-        $patches = array();
+        $patches = [];
         $patches[] = $patch;
         $patchRequest = new PatchRequest();
         $patchRequest->setPatches($patches);
@@ -172,7 +172,7 @@ class BillingAgreementsFunctionalTest extends TestCase
      */
     public function testGetTransactions($agreement)
     {
-        $params = array('start_date' => date('Y-m-d', strtotime('-15 years')), 'end_date' => date('Y-m-d', strtotime('+5 days')));
+        $params = ['start_date' => date('Y-m-d', strtotime('-15 years')), 'end_date' => date('Y-m-d', strtotime('+5 days'))];
         $result = Agreement::searchTransactions($agreement->getId(), $params, $this->apiContext, $this->mockPayPalRestCall);
         $this->assertNotNull($result);
         $this->assertInternalType('array', $result->getAgreementTransactionList());

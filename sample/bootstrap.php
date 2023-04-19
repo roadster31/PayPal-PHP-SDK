@@ -5,7 +5,7 @@
 
 // Include the composer Autoloader
 // The location of your project's vendor autoloader.
-$composerAutoload = dirname(dirname(dirname(__DIR__))) . '/autoload.php';
+$composerAutoload = dirname(__DIR__, 3) . '/autoload.php';
 if (!file_exists($composerAutoload)) {
     //If the project is used as its own project, it would use rest-api-sdk-php composer autoloader.
     $composerAutoload = dirname(__DIR__) . '/vendor/autoload.php';
@@ -49,7 +49,7 @@ return $apiContext;
  * Helper method for getting an APIContext for all calls
  * @param string $clientId Client ID
  * @param string $clientSecret Client Secret
- * @return PayPal\Rest\ApiContext
+ * @return ApiContext
  */
 function getApiContext($clientId, $clientSecret)
 {
@@ -82,17 +82,14 @@ function getApiContext($clientId, $clientSecret)
     // based configuration
 
     $apiContext->setConfig(
-        array(
+        [
             'mode' => 'sandbox',
             'log.LogEnabled' => true,
             'log.FileName' => '../PayPal.log',
-            'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+            'log.LogLevel' => 'DEBUG',
+            // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
             'cache.enabled' => true,
-            //'cache.FileName' => '/PaypalCache' // for determining paypal cache directory
-            // 'http.CURLOPT_CONNECTTIMEOUT' => 30
-            // 'http.headers.PayPal-Partner-Attribution-Id' => '123123123'
-            //'log.AdapterFactory' => '\PayPal\Log\DefaultLogFactory' // Factory class implementing \PayPal\Log\PayPalLogFactory
-        )
+        ]
     );
 
     // Partner Attribution Id

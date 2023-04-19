@@ -149,8 +149,8 @@ class Agreement extends PayPalResourceModel
     /**
      * Details of the buyer who is enrolling in this agreement. This information is gathered from execution of the approval URL.
      *
-     * @param \PayPal\Api\Payer $payer
-     * 
+     * @param Payer $payer
+     *
      * @return $this
      */
     public function setPayer($payer)
@@ -162,7 +162,7 @@ class Agreement extends PayPalResourceModel
     /**
      * Details of the buyer who is enrolling in this agreement. This information is gathered from execution of the approval URL.
      *
-     * @return \PayPal\Api\Payer
+     * @return Payer
      */
     public function getPayer()
     {
@@ -172,8 +172,8 @@ class Agreement extends PayPalResourceModel
     /**
      * Shipping address object of the agreement, which should be provided if it is different from the default address.
      *
-     * @param \PayPal\Api\Address $shipping_address
-     * 
+     * @param Address $shipping_address
+     *
      * @return $this
      */
     public function setShippingAddress($shipping_address)
@@ -185,7 +185,7 @@ class Agreement extends PayPalResourceModel
     /**
      * Shipping address object of the agreement, which should be provided if it is different from the default address.
      *
-     * @return \PayPal\Api\Address
+     * @return Address
      */
     public function getShippingAddress()
     {
@@ -195,8 +195,8 @@ class Agreement extends PayPalResourceModel
     /**
      * Default merchant preferences from the billing plan are used, unless override preferences are provided here.
      *
-     * @param \PayPal\Api\MerchantPreferences $override_merchant_preferences
-     * 
+     * @param MerchantPreferences $override_merchant_preferences
+     *
      * @return $this
      */
     public function setOverrideMerchantPreferences($override_merchant_preferences)
@@ -208,7 +208,7 @@ class Agreement extends PayPalResourceModel
     /**
      * Default merchant preferences from the billing plan are used, unless override preferences are provided here.
      *
-     * @return \PayPal\Api\MerchantPreferences
+     * @return MerchantPreferences
      */
     public function getOverrideMerchantPreferences()
     {
@@ -218,8 +218,8 @@ class Agreement extends PayPalResourceModel
     /**
      * Array of override_charge_model for this agreement if needed to change the default models from the billing plan.
      *
-     * @param \PayPal\Api\OverrideChargeModel[] $override_charge_models
-     * 
+     * @param OverrideChargeModel[] $override_charge_models
+     *
      * @return $this
      */
     public function setOverrideChargeModels($override_charge_models)
@@ -231,7 +231,7 @@ class Agreement extends PayPalResourceModel
     /**
      * Array of override_charge_model for this agreement if needed to change the default models from the billing plan.
      *
-     * @return \PayPal\Api\OverrideChargeModel[]
+     * @return OverrideChargeModel[]
      */
     public function getOverrideChargeModels()
     {
@@ -241,16 +241,16 @@ class Agreement extends PayPalResourceModel
     /**
      * Append OverrideChargeModels to the list.
      *
-     * @param \PayPal\Api\OverrideChargeModel $overrideChargeModel
+     * @param OverrideChargeModel $overrideChargeModel
      * @return $this
      */
     public function addOverrideChargeModel($overrideChargeModel)
     {
         if (!$this->getOverrideChargeModels()) {
-            return $this->setOverrideChargeModels(array($overrideChargeModel));
+            return $this->setOverrideChargeModels([$overrideChargeModel]);
         } else {
             return $this->setOverrideChargeModels(
-                array_merge($this->getOverrideChargeModels(), array($overrideChargeModel))
+                array_merge($this->getOverrideChargeModels(), [$overrideChargeModel])
             );
         }
     }
@@ -258,21 +258,21 @@ class Agreement extends PayPalResourceModel
     /**
      * Remove OverrideChargeModels from the list.
      *
-     * @param \PayPal\Api\OverrideChargeModel $overrideChargeModel
+     * @param OverrideChargeModel $overrideChargeModel
      * @return $this
      */
     public function removeOverrideChargeModel($overrideChargeModel)
     {
         return $this->setOverrideChargeModels(
-            array_diff($this->getOverrideChargeModels(), array($overrideChargeModel))
+            array_diff($this->getOverrideChargeModels(), [$overrideChargeModel])
         );
     }
 
     /**
      * Plan details for this agreement.
      *
-     * @param \PayPal\Api\Plan $plan
-     * 
+     * @param Plan $plan
+     *
      * @return $this
      */
     public function setPlan($plan)
@@ -284,7 +284,7 @@ class Agreement extends PayPalResourceModel
     /**
      * Plan details for this agreement.
      *
-     * @return \PayPal\Api\Plan
+     * @return Plan
      */
     public function getPlan()
     {
@@ -340,8 +340,8 @@ class Agreement extends PayPalResourceModel
     /**
      * Agreement Details
      *
-     * @param \PayPal\Api\AgreementDetails $agreement_details
-     * 
+     * @param AgreementDetails $agreement_details
+     *
      * @return $this
      */
     public function setAgreementDetails($agreement_details)
@@ -353,7 +353,7 @@ class Agreement extends PayPalResourceModel
     /**
      * Agreement Details
      *
-     * @return \PayPal\Api\AgreementDetails
+     * @return AgreementDetails
      */
     public function getAgreementDetails()
     {
@@ -620,15 +620,12 @@ class Agreement extends PayPalResourceModel
      * @param PayPalRestCall $restCall is the Rest Call Service that is used to make rest calls
      * @return AgreementTransactions
      */
-    public static function searchTransactions($agreementId, $params = array(), $apiContext = null, $restCall = null)
+    public static function searchTransactions($agreementId, $params = [], $apiContext = null, $restCall = null)
     {
         ArgumentValidator::validate($agreementId, 'agreementId');
         ArgumentValidator::validate($params, 'params');
 
-        $allowedParams = array(
-            'start_date' => 1,
-            'end_date' => 1,
-        );
+        $allowedParams = ['start_date' => 1, 'end_date' => 1];
 
         $payLoad = "";
         $json = self::executeCall(

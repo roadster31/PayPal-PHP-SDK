@@ -1,5 +1,7 @@
 <?php
 
+use PayPal\Exception\PayPalConnectionException;
+use PayPal\Validation\JsonValidator;
 /*
     Common functions used across samples
 */
@@ -12,7 +14,7 @@
 class ResultPrinter
 {
 
-    private static $printResultCounter = 0;
+    private static int $printResultCounter = 0;
 
     /**
      * Prints HTML Output to web page.
@@ -20,11 +22,9 @@ class ResultPrinter
      * @param string     $title
      * @param string    $objectName
      * @param string    $objectId
-     * @param mixed     $request
-     * @param mixed     $response
      * @param string $errorMessage
      */
-    public static function printOutput($title, $objectName, $objectId = null, $request = null, $response = null, $errorMessage = null)
+    public static function printOutput($title, $objectName, $objectId = null, mixed $request = null, mixed $response = null, $errorMessage = null)
     {
         if (PHP_SAPI == 'cli') {
             self::$printResultCounter++;
@@ -62,7 +62,7 @@ class ResultPrinter
             ';
 
             if ($objectId) {
-                echo "<div>" . ($objectName ? $objectName : "Object") . " with ID: $objectId </div>";
+                echo "<div>" . ($objectName ?: "Object") . " with ID: $objectId </div>";
             }
 
             echo '<div class="row hidden-xs hidden-sm hidden-md"><div class="col-md-6"><h4>Request Object</h4>';
@@ -93,10 +93,8 @@ class ResultPrinter
      * @param string     $title
      * @param string    $objectName
      * @param string    $objectId
-     * @param mixed     $request
-     * @param mixed     $response
      */
-    public static function printResult($title, $objectName, $objectId = null, $request = null, $response = null)
+    public static function printResult($title, $objectName, $objectId = null, mixed $request = null, mixed $response = null)
     {
         self::printOutput($title, $objectName, $objectId, $request, $response, false);
     }
@@ -108,12 +106,12 @@ class ResultPrinter
      * @param      $objectName
      * @param null $objectId
      * @param null $request
-     * @param \Exception $exception
+     * @param Exception $exception
      */
     public static function printError($title, $objectName, $objectId = null, $request = null, $exception = null)
     {
         $data = null;
-        if ($exception instanceof \PayPal\Exception\PayPalConnectionException) {
+        if ($exception instanceof PayPalConnectionException) {
             $data = $exception->getData();
         }
         self::printOutput($title, $objectName, $objectId, $request, $data, $exception->getMessage());
@@ -128,8 +126,8 @@ class ResultPrinter
             if (is_a($object, 'PayPal\Common\PayPalModel')) {
                 /** @var $object \PayPal\Common\PayPalModel */
                 echo $object->toJSON(128);
-            } elseif (is_string($object) && \PayPal\Validation\JsonValidator::validate($object, true)) {
-                echo str_replace('\\/', '/', json_encode(json_decode($object), 128));
+            } elseif (is_string($object) && JsonValidator::validate($object, true)) {
+                echo str_replace('\\/', '/', json_encode(json_decode($object, null, 512, JSON_THROW_ON_ERROR), 128));
             } elseif (is_string($object)) {
                 echo $object;
             } else {
@@ -151,8 +149,8 @@ class ResultPrinter
             if (is_a($object, 'PayPal\Common\PayPalModel')) {
                 /** @var $object \PayPal\Common\PayPalModel */
                 echo '<pre class="prettyprint '. ($error ? 'error' : '') .'">' . $object->toJSON(128) . "</pre>";
-            } elseif (is_string($object) && \PayPal\Validation\JsonValidator::validate($object, true)) {
-                echo '<pre class="prettyprint '. ($error ? 'error' : '') .'">'. str_replace('\\/', '/', json_encode(json_decode($object), 128)) . "</pre>";
+            } elseif (is_string($object) && JsonValidator::validate($object, true)) {
+                echo '<pre class="prettyprint '. ($error ? 'error' : '') .'">'. str_replace('\\/', '/', json_encode(json_decode($object, null, 512, JSON_THROW_ON_ERROR), 128)) . "</pre>";
             } elseif (is_string($object)) {
                 echo '<pre class="prettyprint '. ($error ? 'error' : '') .'">' . $object . '</pre>';
             } else {
@@ -177,7 +175,7 @@ function getBaseUrl()
 {
     if (PHP_SAPI == 'cli') {
         $trace=debug_backtrace();
-        $relativePath = substr(dirname($trace[0]['file']), strlen(dirname(dirname(__FILE__))));
+        $relativePath = substr(dirname($trace[0]['file']), strlen(dirname(__FILE__, 2)));
         echo "Warning: This sample may require a server to handle return URL. Cannot execute in command line. Defaulting URL to http://localhost$relativePath \n";
         return "http://localhost" . $relativePath;
     }

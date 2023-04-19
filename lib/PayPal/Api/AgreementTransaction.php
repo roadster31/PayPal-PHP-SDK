@@ -96,8 +96,8 @@ class AgreementTransaction extends PayPalModel
     /**
      * Amount for this transaction.
      *
-     * @param \PayPal\Api\Currency $amount
-     * 
+     * @param Currency $amount
+     *
      * @return $this
      */
     public function setAmount($amount)
@@ -109,7 +109,7 @@ class AgreementTransaction extends PayPalModel
     /**
      * Amount for this transaction.
      *
-     * @return \PayPal\Api\Currency
+     * @return Currency
      */
     public function getAmount()
     {
@@ -119,8 +119,8 @@ class AgreementTransaction extends PayPalModel
     /**
      * Fee amount for this transaction.
      *
-     * @param \PayPal\Api\Currency $fee_amount
-     * 
+     * @param Currency $fee_amount
+     *
      * @return $this
      */
     public function setFeeAmount($fee_amount)
@@ -132,7 +132,7 @@ class AgreementTransaction extends PayPalModel
     /**
      * Fee amount for this transaction.
      *
-     * @return \PayPal\Api\Currency
+     * @return Currency
      */
     public function getFeeAmount()
     {
@@ -142,8 +142,8 @@ class AgreementTransaction extends PayPalModel
     /**
      * Net amount for this transaction.
      *
-     * @param \PayPal\Api\Currency $net_amount
-     * 
+     * @param Currency $net_amount
+     *
      * @return $this
      */
     public function setNetAmount($net_amount)
@@ -155,7 +155,7 @@ class AgreementTransaction extends PayPalModel
     /**
      * Net amount for this transaction.
      *
-     * @return \PayPal\Api\Currency
+     * @return Currency
      */
     public function getNetAmount()
     {

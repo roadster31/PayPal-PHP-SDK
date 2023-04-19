@@ -5,6 +5,7 @@
 
 namespace PayPal\Handler;
 
+use Paypal\Rest\ApiContext;
 use PayPal\Common\PayPalUserAgent;
 use PayPal\Core\PayPalConstants;
 use PayPal\Core\PayPalHttpConfig;
@@ -18,20 +19,12 @@ use PayPal\Exception\PayPalMissingCredentialException;
 class OauthHandler implements IPayPalHandler
 {
     /**
-     * Private Variable
-     *
-     * @var \Paypal\Rest\ApiContext $apiContext
-     */
-    private $apiContext;
-
-    /**
      * Construct
      *
-     * @param \Paypal\Rest\ApiContext $apiContext
+     * @param ApiContext $apiContext
      */
-    public function __construct($apiContext)
+    public function __construct(private $apiContext)
     {
-        $this->apiContext = $apiContext;
     }
 
     /**
@@ -48,15 +41,11 @@ class OauthHandler implements IPayPalHandler
         $config = $this->apiContext->getConfig();
 
         $httpConfig->setUrl(
-            rtrim(trim($this->_getEndpoint($config)), '/') .
-            (isset($options['path']) ? $options['path'] : '')
+            rtrim(trim(self::_getEndpoint($config)), '/') .
+            ($options['path'] ?? '')
         );
 
-        $headers = array(
-            "User-Agent"    => PayPalUserAgent::getValue(PayPalConstants::SDK_NAME, PayPalConstants::SDK_VERSION),
-            "Authorization" => "Basic " . base64_encode($options['clientId'] . ":" . $options['clientSecret']),
-            "Accept"        => "*/*"
-        );
+        $headers = ["User-Agent"    => PayPalUserAgent::getValue(PayPalConstants::SDK_NAME, PayPalConstants::SDK_VERSION), "Authorization" => "Basic " . base64_encode($options['clientId'] . ":" . $options['clientSecret']), "Accept"        => "*/*"];
         $httpConfig->setHeaders($headers);
 
         // Add any additional Headers that they may have provided
@@ -72,7 +61,7 @@ class OauthHandler implements IPayPalHandler
      * @param array $config
      *
      * @return PayPalHttpConfig
-     * @throws \PayPal\Exception\PayPalConfigurationException
+     * @throws PayPalConfigurationException
      */
     private static function _getEndpoint($config)
     {
@@ -81,16 +70,11 @@ class OauthHandler implements IPayPalHandler
         } elseif (isset($config['service.EndPoint'])) {
             $baseEndpoint = $config['service.EndPoint'];
         } elseif (isset($config['mode'])) {
-            switch (strtoupper($config['mode'])) {
-                case 'SANDBOX':
-                    $baseEndpoint = PayPalConstants::REST_SANDBOX_ENDPOINT;
-                    break;
-                case 'LIVE':
-                    $baseEndpoint = PayPalConstants::REST_LIVE_ENDPOINT;
-                    break;
-                default:
-                    throw new PayPalConfigurationException('The mode config parameter must be set to either sandbox/live');
-            }
+            $baseEndpoint = match (strtoupper($config['mode'])) {
+                'SANDBOX' => PayPalConstants::REST_SANDBOX_ENDPOINT,
+                'LIVE' => PayPalConstants::REST_LIVE_ENDPOINT,
+                default => throw new PayPalConfigurationException('The mode config parameter must be set to either sandbox/live'),
+            };
         } else {
             // Defaulting to Sandbox
             $baseEndpoint = PayPalConstants::REST_SANDBOX_ENDPOINT;

@@ -2,6 +2,8 @@
 
 namespace PayPal\Common;
 
+use PayPal\Api\Links;
+use PayPal\Handler\RestHandler;
 use PayPal\Rest\ApiContext;
 use PayPal\Rest\IResource;
 use PayPal\Transport\PayPalRestCall;
@@ -19,7 +21,7 @@ class PayPalResourceModel extends PayPalModel implements IResource
     /**
      * Sets Links
      *
-     * @param \PayPal\Api\Links[] $links
+     * @param Links[] $links
      *
      * @return $this
      */
@@ -32,7 +34,7 @@ class PayPalResourceModel extends PayPalModel implements IResource
     /**
      * Gets Links
      *
-     * @return \PayPal\Api\Links[]
+     * @return Links[]
      */
     public function getLinks()
     {
@@ -54,16 +56,16 @@ class PayPalResourceModel extends PayPalModel implements IResource
     /**
      * Append Links to the list.
      *
-     * @param \PayPal\Api\Links $links
+     * @param Links $links
      * @return $this
      */
     public function addLink($links)
     {
         if (!$this->getLinks()) {
-            return $this->setLinks(array($links));
+            return $this->setLinks([$links]);
         } else {
             return $this->setLinks(
-                array_merge($this->getLinks(), array($links))
+                array_merge($this->getLinks(), [$links])
             );
         }
     }
@@ -71,13 +73,13 @@ class PayPalResourceModel extends PayPalModel implements IResource
     /**
      * Remove Links from the list.
      *
-     * @param \PayPal\Api\Links $links
+     * @param Links $links
      * @return $this
      */
     public function removeLink($links)
     {
         return $this->setLinks(
-            array_diff($this->getLinks(), array($links))
+            array_diff($this->getLinks(), [$links])
         );
     }
 
@@ -94,14 +96,14 @@ class PayPalResourceModel extends PayPalModel implements IResource
      * @param array $handlers
      * @return string json response of the object
      */
-    protected static function executeCall($url, $method, $payLoad, $headers = array(), $apiContext = null, $restCall = null, $handlers = array('PayPal\Handler\RestHandler'))
+    protected static function executeCall($url, $method, $payLoad, $headers = [], $apiContext = null, $restCall = null, $handlers = [RestHandler::class])
     {
         //Initialize the context and rest call object if not provided explicitly
-        $apiContext = $apiContext ? $apiContext : new ApiContext(self::$credential);
-        $restCall = $restCall ? $restCall : new PayPalRestCall($apiContext);
+        $apiContext = $apiContext ?: new ApiContext(self::$credential);
+        $restCall = $restCall ?: new PayPalRestCall($apiContext);
 
         //Make the execution call
-        $json = $restCall->execute($handlers, $url, $method, $payLoad, $headers);
+        $json = $restCall->execute($url, $method, $handlers, $payLoad, $headers);
         return $json;
     }
 
@@ -114,7 +116,7 @@ class PayPalResourceModel extends PayPalModel implements IResource
      */
     public function updateAccessToken($refreshToken, $apiContext)
     {
-        $apiContext = $apiContext ? $apiContext : new ApiContext(self::$credential);
+        $apiContext = $apiContext ?: new ApiContext(self::$credential);
         $apiContext->getCredential()->updateAccessToken($apiContext->getConfig(), $refreshToken);
     }
 }

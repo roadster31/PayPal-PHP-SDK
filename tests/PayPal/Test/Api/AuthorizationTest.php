@@ -2,6 +2,7 @@
 
 namespace PayPal\Test\Api;
 
+use PayPal\Transport\PayPalRestCall;
 use PayPal\Api\Authorization;
 use PayPal\Transport\PPRestCall;
 use PHPUnit\Framework\TestCase;
@@ -90,7 +91,7 @@ class AuthorizationTest extends TestCase
      */
     public function testGet($obj, $mockApiContext)
     {
-        $mockPPRestCall = $this->getMockBuilder('\PayPal\Transport\PayPalRestCall')
+        $mockPPRestCall = $this->getMockBuilder('\\' . PayPalRestCall::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -109,7 +110,7 @@ class AuthorizationTest extends TestCase
      */
     public function testCapture($obj, $mockApiContext)
     {
-        $mockPPRestCall = $this->getMockBuilder('\PayPal\Transport\PayPalRestCall')
+        $mockPPRestCall = $this->getMockBuilder('\\' . PayPalRestCall::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -129,7 +130,7 @@ class AuthorizationTest extends TestCase
      */
     public function testVoid($obj, $mockApiContext)
     {
-        $mockPPRestCall = $this->getMockBuilder('\PayPal\Transport\PayPalRestCall')
+        $mockPPRestCall = $this->getMockBuilder('\\' . PayPalRestCall::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -148,7 +149,7 @@ class AuthorizationTest extends TestCase
      */
     public function testReauthorize($obj, $mockApiContext)
     {
-        $mockPPRestCall = $this->getMockBuilder('\PayPal\Transport\PayPalRestCall')
+        $mockPPRestCall = $this->getMockBuilder('\\' . PayPalRestCall::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -168,9 +169,6 @@ class AuthorizationTest extends TestCase
         $mockApiContext = $this->getMockBuilder('ApiContext')
                     ->disableOriginalConstructor()
                     ->getMock();
-        return array(
-            array($obj, $mockApiContext),
-            array($obj, null)
-        );
+        return [[$obj, $mockApiContext], [$obj, null]];
     }
 }

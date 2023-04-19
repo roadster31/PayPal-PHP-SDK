@@ -192,8 +192,8 @@ class Plan extends PayPalResourceModel
     /**
      * Array of payment definitions for this billing plan.
      *
-     * @param \PayPal\Api\PaymentDefinition[] $payment_definitions
-     * 
+     * @param PaymentDefinition[] $payment_definitions
+     *
      * @return $this
      */
     public function setPaymentDefinitions($payment_definitions)
@@ -205,7 +205,7 @@ class Plan extends PayPalResourceModel
     /**
      * Array of payment definitions for this billing plan.
      *
-     * @return \PayPal\Api\PaymentDefinition[]
+     * @return PaymentDefinition[]
      */
     public function getPaymentDefinitions()
     {
@@ -215,16 +215,16 @@ class Plan extends PayPalResourceModel
     /**
      * Append PaymentDefinitions to the list.
      *
-     * @param \PayPal\Api\PaymentDefinition $paymentDefinition
+     * @param PaymentDefinition $paymentDefinition
      * @return $this
      */
     public function addPaymentDefinition($paymentDefinition)
     {
         if (!$this->getPaymentDefinitions()) {
-            return $this->setPaymentDefinitions(array($paymentDefinition));
+            return $this->setPaymentDefinitions([$paymentDefinition]);
         } else {
             return $this->setPaymentDefinitions(
-                array_merge($this->getPaymentDefinitions(), array($paymentDefinition))
+                array_merge($this->getPaymentDefinitions(), [$paymentDefinition])
             );
         }
     }
@@ -232,21 +232,21 @@ class Plan extends PayPalResourceModel
     /**
      * Remove PaymentDefinitions from the list.
      *
-     * @param \PayPal\Api\PaymentDefinition $paymentDefinition
+     * @param PaymentDefinition $paymentDefinition
      * @return $this
      */
     public function removePaymentDefinition($paymentDefinition)
     {
         return $this->setPaymentDefinitions(
-            array_diff($this->getPaymentDefinitions(), array($paymentDefinition))
+            array_diff($this->getPaymentDefinitions(), [$paymentDefinition])
         );
     }
 
     /**
      * Array of terms for this billing plan.
      *
-     * @param \PayPal\Api\Terms[] $terms
-     * 
+     * @param Terms[] $terms
+     *
      * @return $this
      */
     public function setTerms($terms)
@@ -258,7 +258,7 @@ class Plan extends PayPalResourceModel
     /**
      * Array of terms for this billing plan.
      *
-     * @return \PayPal\Api\Terms[]
+     * @return Terms[]
      */
     public function getTerms()
     {
@@ -268,16 +268,16 @@ class Plan extends PayPalResourceModel
     /**
      * Append Terms to the list.
      *
-     * @param \PayPal\Api\Terms $terms
+     * @param Terms $terms
      * @return $this
      */
     public function addTerm($terms)
     {
         if (!$this->getTerms()) {
-            return $this->setTerms(array($terms));
+            return $this->setTerms([$terms]);
         } else {
             return $this->setTerms(
-                array_merge($this->getTerms(), array($terms))
+                array_merge($this->getTerms(), [$terms])
             );
         }
     }
@@ -285,21 +285,21 @@ class Plan extends PayPalResourceModel
     /**
      * Remove Terms from the list.
      *
-     * @param \PayPal\Api\Terms $terms
+     * @param Terms $terms
      * @return $this
      */
     public function removeTerm($terms)
     {
         return $this->setTerms(
-            array_diff($this->getTerms(), array($terms))
+            array_diff($this->getTerms(), [$terms])
         );
     }
 
     /**
      * Specific preferences such as: set up fee, max fail attempts, autobill amount, and others that are configured for this billing plan.
      *
-     * @param \PayPal\Api\MerchantPreferences $merchant_preferences
-     * 
+     * @param MerchantPreferences $merchant_preferences
+     *
      * @return $this
      */
     public function setMerchantPreferences($merchant_preferences)
@@ -311,7 +311,7 @@ class Plan extends PayPalResourceModel
     /**
      * Specific preferences such as: set up fee, max fail attempts, autobill amount, and others that are configured for this billing plan.
      *
-     * @return \PayPal\Api\MerchantPreferences
+     * @return MerchantPreferences
      */
     public function getMerchantPreferences()
     {
@@ -423,12 +423,7 @@ class Plan extends PayPalResourceModel
     {
         ArgumentValidator::validate($params, 'params');
         $payLoad = "";
-        $allowedParams = array(
-            'page_size' => 1,
-            'status' => 1,
-            'page' => 1,
-            'total_required' => 1
-        );
+        $allowedParams = ['page_size' => 1, 'status' => 1, 'page' => 1, 'total_required' => 1];
         $json = self::executeCall(
             "/v1/payments/billing-plans/" . "?" . http_build_query(array_intersect_key($params, $allowedParams)),
             "GET",

@@ -54,6 +54,6 @@ class PaymentExecutionTest extends TestCase
     {
         $this->assertEquals($obj->getPayerId(), "TestSample");
         $this->assertEquals($obj->getCarrierAccountId(), "TestSample");
-        $this->assertEquals($obj->getTransactions(), array(TransactionTest::getObject()));
+        $this->assertEquals($obj->getTransactions(), [TransactionTest::getObject()]);
     }
 }

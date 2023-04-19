@@ -2,6 +2,14 @@
 
 namespace PayPal\Common;
 
+use PayPal\Api\Links;
+use PayPal\Api\Payer;
+use PayPal\Api\Transaction;
+use PayPal\Exception\PayPalConfigurationException;
+use Stringable;
+use PayPal\Auth\OAuthTokenCredential;
+use InvalidArgumentException;
+use stdClass;
 use PayPal\Validation\JsonValidator;
 
 /**
@@ -9,15 +17,15 @@ use PayPal\Validation\JsonValidator;
  * Stores all member data in a Hashmap that enables easy
  * JSON encoding/decoding
  */
-class PayPalModel
+class PayPalModel implements Stringable
 {
 
-    private $_propMap = array();
+    private array $_propMap = [];
 
     /**
      * OAuth Credentials to use for this call
      *
-     * @var \PayPal\Auth\OAuthTokenCredential $credential
+     * @var OAuthTokenCredential $credential
      */
     protected static $credential;
 
@@ -25,7 +33,7 @@ class PayPalModel
      * Sets Credential
      *
      * @deprecated Pass ApiContext to create/get methods instead
-     * @param \PayPal\Auth\OAuthTokenCredential $credential
+     * @param OAuthTokenCredential $credential
      */
     public static function setCredential($credential)
     {
@@ -39,7 +47,7 @@ class PayPalModel
      * to do $obj->fromJson($data) later after creating the object.
      *
      * @param array|string|null $data
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($data = null)
     {
@@ -64,27 +72,27 @@ class PayPalModel
      * @param mixed $data Array object or json string representation
      * @return array
      */
-    public static function getList($data)
+    public static function getList(mixed $data)
     {
         // Return Null if Null
         if ($data === null) {
             return null;
         }
 
-        if (is_a($data, get_class(new \stdClass()))) {
+        if (is_a($data, (new stdClass())::class)) {
             //This means, root element is object
-            return new static(json_encode($data));
+            return new static(json_encode($data, JSON_THROW_ON_ERROR));
         }
 
-        $list = array();
+        $list = [];
 
         if (is_array($data)) {
-            $data = json_encode($data);
+            $data = json_encode($data, JSON_THROW_ON_ERROR);
         }
 
         if (JsonValidator::validate($data)) {
             // It is valid JSON
-            $decoded = json_decode($data);
+            $decoded = json_decode($data, null, 512, JSON_THROW_ON_ERROR);
             if ($decoded === null) {
                 return $list;
             }
@@ -93,9 +101,9 @@ class PayPalModel
                     $list[] = self::getList($v);
                 }
             }
-            if (is_a($decoded, get_class(new \stdClass()))) {
+            if (is_a($decoded, (new stdClass())::class)) {
                 //This means, root element is object
-                $list[] = new static(json_encode($decoded));
+                $list[] = new static(json_encode($decoded, JSON_THROW_ON_ERROR));
             }
         }
 
@@ -139,7 +147,7 @@ class PayPalModel
      */
     private function convertToCamelCase($key)
     {
-        return str_replace(' ', '', ucwords(str_replace(array('_', '-'), ' ', $key)));
+        return str_replace(' ', '', ucwords(str_replace(['_', '-'], ' ', $key)));
     }
 
     /**
@@ -171,12 +179,12 @@ class PayPalModel
      */
     private function _convertToArray($param)
     {
-        $ret = array();
+        $ret = [];
         foreach ($param as $k => $v) {
-            if ($v instanceof PayPalModel) {
+            if ($v instanceof self) {
                 $ret[$k] = $v->toArray();
             } elseif (is_array($v) && sizeof($v) <= 0) {
-                $ret[$k] = array();
+                $ret[$k] = [];
             } elseif (is_array($v)) {
                 $ret[$k] = $this->_convertToArray($v);
             } else {
@@ -197,6 +205,7 @@ class PayPalModel
      *
      * @param $arr
      * @return $this
+     * @throws PayPalConfigurationException
      */
     public function fromArray($arr)
     {
@@ -206,29 +215,32 @@ class PayPalModel
                 // If the value is an array, it means, it is an object after conversion
                 if (is_array($v)) {
                     // Determine the class of the object
-                    if (($clazz = ReflectionUtil::getPropertyClass(get_class($this), $k)) != null) {
+                    if (($clazz = ReflectionUtil::getPropertyClass(static::class, $k)) !== null) {
                         // If the value is an associative array, it means, its an object. Just make recursive call to it.
                         if (empty($v)) {
-                            if (ReflectionUtil::isPropertyClassArray(get_class($this), $k)) {
+                            if (ReflectionUtil::isPropertyClassArray(static::class, $k)) {
                                 // It means, it is an array of objects.
-                                $this->assignValue($k, array());
+                                $this->assignValue($k, []);
                                 continue;
                             }
-                            $o = new $clazz();
-                            //$arr = array();
+                            $o = ($clazz === "Payer"? new Payer(): new $clazz);
                             $this->assignValue($k, $o);
                         } elseif (ArrayUtil::isAssocArray($v)) {
                             /** @var self $o */
-                            $o = new $clazz();
+                            $o = ($clazz === "Payer"? new Payer(): new $clazz);
                             $o->fromArray($v);
                             $this->assignValue($k, $o);
                         } else {
                             // Else, value is an array of object/data
-                            $arr = array();
+                            $arr = [];
                             // Iterate through each element in that array.
                             foreach ($v as $nk => $nv) {
                                 if (is_array($nv)) {
-                                    $o = new $clazz();
+                                    $o = match ($clazz) {
+                                        'Transaction' => new Transaction(),
+                                        'Links' => new Links(),
+                                        default => new $clazz()
+                                    };
                                     $o->fromArray($nv);
                                     $arr[$nk] = $o;
                                 } else {
@@ -267,7 +279,7 @@ class PayPalModel
      */
     public function fromJson($json)
     {
-        return $this->fromArray(json_decode($json, true));
+        return $this->fromArray(json_decode($json, true, 512, JSON_THROW_ON_ERROR));
     }
 
     /**
@@ -302,7 +314,7 @@ class PayPalModel
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toJSON(128);
     }
