@@ -34,7 +34,7 @@ class Payment extends PayPalResourceModel
      * Identifier of the payment resource created.
      *
      * @param string $id
-     * 
+     *
      * @return $this
      */
     public function setId($id)
@@ -58,7 +58,7 @@ class Payment extends PayPalResourceModel
      * Valid Values: ["sale", "authorize", "order"]
      *
      * @param string $intent
-     * 
+     *
      * @return $this
      */
     public function setIntent($intent)
@@ -148,7 +148,7 @@ class Payment extends PayPalResourceModel
      * ID of the cart to execute the payment.
      * @deprecated Not publicly available
      * @param string $cart
-     * 
+     *
      * @return $this
      */
     public function setCart($cart)
@@ -277,7 +277,7 @@ class Payment extends PayPalResourceModel
      * Collection of PayPal generated billing agreement tokens.
      * @deprecated Not publicly available
      * @param string[] $billing_agreement_tokens
-     * 
+     *
      * @return $this
      */
     public function setBillingAgreementTokens($billing_agreement_tokens)
@@ -377,7 +377,7 @@ class Payment extends PayPalResourceModel
      * Valid Values: ["created", "approved", "failed", "partially_completed", "in_progress"]
      *
      * @param string $state
-     * 
+     *
      * @return $this
      */
     public function setState($state)
@@ -400,7 +400,7 @@ class Payment extends PayPalResourceModel
      * PayPal generated identifier for the merchant's payment experience profile. Refer to [this](https://developer.paypal.com/docs/api/#payment-experience) link to create experience profile ID.
      *
      * @param string $experience_profile_id
-     * 
+     *
      * @return $this
      */
     public function setExperienceProfileId($experience_profile_id)
@@ -423,7 +423,7 @@ class Payment extends PayPalResourceModel
      * free-form field for the use of clients to pass in a message to the payer
      *
      * @param string $note_to_payer
-     * 
+     *
      * @return $this
      */
     public function setNoteToPayer($note_to_payer)
@@ -445,7 +445,7 @@ class Payment extends PayPalResourceModel
     /**
      * Set of redirect URLs you provide only for PayPal-based payments.
      *
-     * @param RedirectUrls $redirect_urls
+     * @param \PayPal\Api\RedirectUrls $redirect_urls
      *
      * @return $this
      */
@@ -458,7 +458,7 @@ class Payment extends PayPalResourceModel
     /**
      * Set of redirect URLs you provide only for PayPal-based payments.
      *
-     * @return RedirectUrls
+     * @return \PayPal\Api\RedirectUrls
      */
     public function getRedirectUrls()
     {
@@ -470,7 +470,7 @@ class Payment extends PayPalResourceModel
      * Valid Values: ["UNABLE_TO_COMPLETE_TRANSACTION", "INVALID_PAYMENT_METHOD", "PAYER_CANNOT_PAY", "CANNOT_PAY_THIS_PAYEE", "REDIRECT_REQUIRED", "PAYEE_FILTER_RESTRICTIONS"]
      *
      * @param string $failure_reason
-     * 
+     *
      * @return $this
      */
     public function setFailureReason($failure_reason)
@@ -493,7 +493,7 @@ class Payment extends PayPalResourceModel
      * Payment creation time as defined in [RFC 3339 Section 5.6](http://tools.ietf.org/html/rfc3339#section-5.6).
      *
      * @param string $create_time
-     * 
+     *
      * @return $this
      */
     public function setCreateTime($create_time)
@@ -516,7 +516,7 @@ class Payment extends PayPalResourceModel
      * Payment update time as defined in [RFC 3339 Section 5.6](http://tools.ietf.org/html/rfc3339#section-5.6).
      *
      * @param string $update_time
-     * 
+     *
      * @return $this
      */
     public function setUpdateTime($update_time)
@@ -544,7 +544,7 @@ class Payment extends PayPalResourceModel
     {
         return $this->getLink(PayPalConstants::APPROVAL_URL);
     }
-	
+
 	/**
      * Get token from Approval Link
      *
@@ -556,7 +556,7 @@ class Payment extends PayPalResourceModel
 		parse_str(parse_url($this->getApprovalLink(), PHP_URL_QUERY), $query);
 		return !isset($query[$parameter_name]) ? null : $query[$parameter_name];
 	}
-	
+
     /**
      * Creates and processes a payment. In the JSON request body, include a `payment` object with the intent, payer, and transactions. For PayPal payments, include redirect URLs in the `payment` object.
      *

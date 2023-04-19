@@ -23,7 +23,7 @@ class Amount extends PayPalModel
      * 3-letter [currency code](https://developer.paypal.com/docs/integration/direct/rest_api_payment_country_currency_support/). PayPal does not support all currencies.
      *
      * @param string $currency
-     * 
+     *
      * @return $this
      */
     public function setCurrency($currency)
@@ -69,7 +69,7 @@ class Amount extends PayPalModel
     /**
      * Additional details of the payment amount.
      *
-     * @param Details $details
+     * @param \PayPal\Api\Details $details
      *
      * @return $this
      */
@@ -82,7 +82,7 @@ class Amount extends PayPalModel
     /**
      * Additional details of the payment amount.
      *
-     * @return Details
+     * @return \PayPal\Api\Details
      */
     public function getDetails()
     {
